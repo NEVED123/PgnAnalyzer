@@ -6,11 +6,11 @@ class Program
 {
     static void Main(string[] args)
     {
-        analyze("games.pgn");
+        Pgn pgn = new Pgn();
+        Console.WriteLine("hello world");
     }
 
     static void analyze(string path){
-
 
     }
 }
