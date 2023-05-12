@@ -2,7 +2,7 @@ namespace test;
 
 public class Tests
 {
-    PgnEnumerator enumerator;
+    PgnEnumerator? enumerator;
 
     [SetUp]
     public void Setup()
@@ -13,7 +13,7 @@ public class Tests
     [Test]
     public void ReturnsPgn()
     {
-        enumerator.MoveNext();
+        enumerator!.MoveNext();
 
         Pgn pgn = enumerator.Current;
 
@@ -23,7 +23,7 @@ public class Tests
     [Test]
     public void ReturnsAllPgn()
     {
-        while(enumerator.MoveNext())
+        while(enumerator!.MoveNext())
         {
             Console.Write(enumerator.Current);
         }
@@ -35,6 +35,6 @@ public class Tests
     public void ThrowsErrorIfNoCurrent()
     {
         Assert.Throws<InvalidOperationException>(
-        () => { Pgn pgn = enumerator.Current; } );
+        () => { Pgn pgn = enumerator!.Current; } );
     }
 }
