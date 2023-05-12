@@ -6,18 +6,11 @@ class Program
 {
     static void Main(string[] args)
     {
-        parse();
+        analyze("games.pgn");
     }
 
-    static void parse(){
-        StreamReader sr = new StreamReader("games.pgn");
+    static void analyze(string path){
 
-        string line = sr.ReadLine()!;
-
-        while(line != null){
-            Console.WriteLine(line);
-            line = sr.ReadLine()!;
-        }
 
     }
 }
