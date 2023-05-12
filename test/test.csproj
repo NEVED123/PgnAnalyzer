@@ -20,4 +20,10 @@
     <ProjectReference Include="..\src\pgnanalyzer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="test.pgn">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

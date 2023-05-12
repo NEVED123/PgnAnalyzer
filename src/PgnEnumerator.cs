@@ -1,22 +1,30 @@
 using System.Collections;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace PgnAnalyzer;
 
 public class PgnEnumerator : IEnumerator<Pgn>
 {
     private StreamReader sr;
-    private Pgn pgn;
+    private Pgn? pgn;
 
     public PgnEnumerator(string pathToPgn)
     {
         sr = new StreamReader(pathToPgn);
-        pgn = new Pgn();
     }
     public Pgn Current
     {
-        get{
-            return pgn;
+        get
+        {
+            if(pgn != null)
+            {
+                return pgn;
+            }
+            else
+            {
+                throw new InvalidOperationException();
+            }
         }
     }
 
@@ -46,9 +54,17 @@ public class PgnEnumerator : IEnumerator<Pgn>
         while(line != null && Regex.Match(line, @"\[(.*)\]").Success)
         {
             //we are reading a tag
+
             var tag = parseTag(line);
             pgn[tag.Key] = tag.Value;
-            sr.ReadLine();
+            line = sr.ReadLine();
+        }
+
+        if(line == null)
+        {
+            //here the file terminates before reading the game
+            pgn = null;
+            return false;
         }
 
         line = sr.ReadLine(); //burn whitespace between tags and game
@@ -56,7 +72,14 @@ public class PgnEnumerator : IEnumerator<Pgn>
         while(line != null && Regex.Match(line, @"^[^\[](.*)(\d)(.*)[^\]]$").Success)
         {
             //we are reading a game - the regex is redundant here but for saftey
-            pgn.game = pgn.game += line;
+            if(pgn.ContainsKey("game"))
+            {
+                pgn["game"] = pgn["game"] + line;
+            }
+            else{
+                pgn["game"] = line;
+            }
+
             line = sr.ReadLine();
         }
 
@@ -67,7 +90,9 @@ public class PgnEnumerator : IEnumerator<Pgn>
     {
         string tagNoBrackets = tag.Trim(new char[]{'[', ']'});
 
-        string[] tagArray = tag.Split(' ', 2);
+        string[] tagArray = tagNoBrackets.Split(' ', 2);
+
+        tagArray[1] = tagArray[1].Trim('"');
 
         return (tagArray[0], tagArray[1]);
     }
