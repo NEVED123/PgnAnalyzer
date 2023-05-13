@@ -12,7 +12,7 @@ struct RatingData
     }
 
     public List<OutOfBookData> outOfBookDataList {get; set;} = new List<OutOfBookData>();
-    public List<BlunderSpotData>? blunderSpotDataList {get; set;} = new List<BlunderSpotData>();
+    public List<BlunderSpotData> blunderSpotDataList {get; set;} = new List<BlunderSpotData>();
     public int? eloMin {get; set;}
     public int whiteWinNum {get; set;}
     public int blackWinNum {get; set;}
