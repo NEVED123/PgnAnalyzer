@@ -8,6 +8,6 @@ struct BlunderSpotData
     }
 
     public int moveNum {get; set;}
-    public string san {get; set;}
+    public string? san {get; set;}
     public int count {get; set;}
 }
