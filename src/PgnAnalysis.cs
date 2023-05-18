@@ -100,8 +100,8 @@ class PgnAnalysis
             {
                 //TODO: FIGURE OUT WHETHER IT WAS A BLACK OR WHITE BLUNDER
                 string blunder = getFirstBlunder(moveText);
-                //IMPLEMENT
-                int blunderMoveNum = 0;
+
+                int blunderMoveNum = getFirstBlunderNum(moveText);
 
                 int blunderSpotIndex = currBlunderSpotDataList.FindIndex(x => x.moveNum == blunderMoveNum);
                 BlunderSpotData currBlunderSpotData;
@@ -124,6 +124,29 @@ class PgnAnalysis
 
     //ALL OF THESE METHODS HAVE BEEN MADE PUBLIC FOR TESTING. THIS IS BAD AND I SHOULDNT BE DOING IT, HOWEVER
     //THE ALTERNATIVE IS GETTING GOOD AND I'M FAR TOO LAZY FOR THAT.
+
+    public int getFirstBlunderNum(string moveText)
+    {
+        if(hasAnalysis(moveText))
+        {
+            List<string> splitMoveText = moveText.Split(" ").ToList();
+
+            int firstBlunderIndex = splitMoveText.FindIndex(move => Regex.Match(move, @"^\s]*\?\?").Success);
+
+            if(firstBlunderIndex != -1)
+            {
+                string blunderNum = splitMoveText[firstBlunderIndex-1];
+
+                blunderNum = blunderNum.Trim('.');
+
+                int blunderNumInt = Int32.Parse(blunderNum);
+
+                return blunderNumInt;
+            }
+        }
+
+        return -1;
+    }
 
     public string getFirstBlunder(string moveText)
     {
@@ -213,7 +236,7 @@ class PgnAnalysis
 
         Console.WriteLine("removed comments: " + output);
 
-        output = Regex.Replace(output, @"\d\.\.\.", "");
+        output = Regex.Replace(output, @"\.\.\.", ".");
 
         return output;
     }
