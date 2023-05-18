@@ -1,5 +1,4 @@
 using System.Text.RegularExpressions;
-using CsvHelper;
 using System.Globalization;
 
 namespace PgnAnalyzer;
