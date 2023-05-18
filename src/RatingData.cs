@@ -1,6 +1,6 @@
 namespace PgnAnalyzer;
 
-struct RatingData
+public struct RatingData
 {
     public RatingData(int eloMin)
     {

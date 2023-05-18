@@ -4,7 +4,7 @@ using System.Globalization;
 
 namespace PgnAnalyzer;
 
-class PgnAnalysis
+public class PgnAnalysis
 {
     public List<OpeningData> analyze(string pathToPgn)
     {

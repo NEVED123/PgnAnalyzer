@@ -1,6 +1,6 @@
 namespace PgnAnalyzer;
 
-struct OpeningData
+public struct OpeningData
 {
     public OpeningData(string eco){
         numGames = 0;

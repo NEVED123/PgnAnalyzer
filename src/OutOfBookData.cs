@@ -1,6 +1,6 @@
 namespace PgnAnalyzer;
 
-struct OutOfBookData
+public struct OutOfBookData
 {
     public OutOfBookData(string san, int moveNum)
     {

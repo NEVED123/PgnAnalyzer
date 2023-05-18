@@ -1,6 +1,6 @@
 namespace PgnAnalyzer;
 
-struct BlunderSpotData
+public struct BlunderSpotData
 {
     public BlunderSpotData(int moveNum)
     {
