@@ -477,5 +477,7 @@ $RECYCLE.BIN/
 *.lnk
 
 *.pgn
+!test.pgn
 
 test.xml
+results.txt

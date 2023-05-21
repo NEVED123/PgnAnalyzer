@@ -125,44 +125,4 @@ public class PgnAnalyzer_Test
         StringAssert.AreEqualIgnoringCase(noComments, pgnAnalysis.stripCommentsFromGame(game));
     }
 
-    [Test]
-    public void analysisTest(){
-        var results = pgnAnalysis.analyze("games100s.pgn");
-
-        foreach(var data in results)
-        {
-            printOpening(data);
-        }
-
-        Assert.Pass();
-
-    }
-
-    private void printOpening(OpeningData data)
-    {
-        Console.WriteLine("ECO: " + data.eco);
-        Console.WriteLine("Number of games with this opening: " + data.numGames);
-        Console.WriteLine("Rating Pools:");
-        foreach(RatingData ratingData in data.ratingDataList)
-        {
-            Console.WriteLine(" Rating: " + ratingData.eloMin);
-            Console.WriteLine(" White Win Number: " + ratingData.whiteWinNum);
-            Console.WriteLine(" Black Win Number: " + ratingData.blackWinNum);
-            Console.WriteLine(" Draw Number: " + ratingData.drawNum);
-            Console.WriteLine(" Out Of Book Moves");
-            foreach(OutOfBookData outOfBookData in ratingData.outOfBookDataList)
-            {
-                Console.WriteLine("     Move: " + outOfBookData.san);
-                Console.WriteLine("     Move Number: " + outOfBookData.moveNum);
-                Console.WriteLine("     Count: " + outOfBookData.count);
-            }
-            Console.WriteLine(" Blunders");
-            foreach(BlunderSpotData blunderSpotData in ratingData.blunderSpotDataList)
-            {
-                Console.WriteLine("     Move: " + blunderSpotData.moveNum);
-                Console.WriteLine("     Count: " + blunderSpotData.count);
-            }
-        }
-    }  
-        
 }
