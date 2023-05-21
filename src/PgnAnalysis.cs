@@ -10,6 +10,8 @@ public class PgnAnalysis
     {
         PgnEnumerator pgns = new PgnEnumerator(pathToPgn);
 
+        Console.WriteLine($"Beginning analysis of {pathToPgn}");
+
         List<OpeningData> openings = new List<OpeningData>();
 
         int totalNumGames = 0;
