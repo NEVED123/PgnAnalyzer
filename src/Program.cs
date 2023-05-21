@@ -47,5 +47,7 @@ class Program
                 outputFile.WriteLine(result);
         }
 
+        Console.WriteLine($"Analysis Successful. Created {exportName}.txt at file path {pathToExport}");
+
     }
 }
