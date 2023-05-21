@@ -8,11 +8,15 @@ class Program
     {
         PgnAnalysis pgn = new PgnAnalysis(); 
 
-        var results = pgn.analyze("games100s.pgn");
+        var results = pgn.analyze("games.pgn");
 
-        foreach(var opening in results)
+        using (StreamWriter outputFile = new StreamWriter("results.txt"))
         {
-            Console.WriteLine(opening);
+            outputFile.WriteLine("---RESULTS---");
+   
+            foreach (var result in results)
+                outputFile.WriteLine(result);
         }
+
     }
 }

@@ -12,6 +12,8 @@ public class PgnAnalysis
 
         List<OpeningData> openings = new List<OpeningData>();
 
+        int totalNumGames = 0;
+
         while(pgns.MoveNext())
         {
             //opening info
@@ -118,7 +120,16 @@ public class PgnAnalysis
                 currBlunderSpotData.count++;
             }
 
+            totalNumGames++;
+
+            if(totalNumGames % 10000 == 0)
+            {
+                Console.WriteLine($"Total games analyzed: {totalNumGames}");
+            }
+
         }
+
+        pgns.Dispose();
 
         return openings;
     }
@@ -236,7 +247,10 @@ public class PgnAnalysis
 
     public int getFirstMoveNum(string moveText)
     {
-        string[] splitMoveText = moveText.Split(" ");
+
+        string stripped = stripCommentsFromGame(moveText);
+
+        string[] splitMoveText = stripped.Split(" ");
 
         //does not start with a number, find the next number and return that-1
         for(int i = 0;i<splitMoveText.Length;i++)
@@ -246,7 +260,7 @@ public class PgnAnalysis
                 string trimmed = splitMoveText[i].Trim('.');
                 
                 if(i == 0)
-                {
+                {            
                     return Int32.Parse(trimmed);
                 }
                 else
@@ -284,7 +298,7 @@ public class PgnAnalysis
 
         string? line = sr.ReadLine();
 
-        string bestFitEco = "";
+        string bestFitEco = "A00";
 
         while(line != null)
         {
@@ -292,9 +306,6 @@ public class PgnAnalysis
 
             string eco = splitLine[0];
             string ecoMoveText = splitLine[2];
-
-            // Console.WriteLine(moveTextNoPeriod);
-            // Console.WriteLine(ecoMoveText);
 
             if(moveTextNoPeriod.Contains(ecoMoveText))
             {
@@ -306,6 +317,8 @@ public class PgnAnalysis
 
             line = sr.ReadLine();
         }
+
+        sr.Close();
 
         return bestFitEco;
     }
@@ -326,6 +339,7 @@ public class PgnAnalysis
 
             if(ecoFromFile == eco)
             {
+                sr.Close();
                 return splitLine[2];
             }
 
@@ -372,15 +386,27 @@ public class PgnAnalysis
         int numOfElos = 0;
         int totalElo = 0;
 
-        if(pgn.ContainsKey("WhiteElo"))
+        if(pgn.ContainsKey("WhiteElo") && int.TryParse(pgn["WhiteElo"], out int n))
         {
-            totalElo += int.Parse(pgn["WhiteElo"]);
-            numOfElos++;
+            try{
+                totalElo += int.Parse(pgn["WhiteElo"]);
+                numOfElos++;
+            }
+            catch
+            {
+                Console.WriteLine("Invalid Elo: " + pgn["WhiteElo"]);
+            }
         }
-        if(pgn.ContainsKey("BlackElo"))
+        if(pgn.ContainsKey("BlackElo") && int.TryParse(pgn["BlackElo"], out int m))
         {
-            totalElo += int.Parse(pgn["BlackElo"]);
-            numOfElos++;
+            try{
+                totalElo += int.Parse(pgn["BlackElo"]);
+                numOfElos++;
+            }
+            catch
+            {
+                Console.WriteLine("Invalid Elo: " + pgn["BlackElo"]);
+            }
         }
 
         if(numOfElos != 0)

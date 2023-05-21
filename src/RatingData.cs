@@ -39,7 +39,7 @@ public class RatingData
 
         if(blunderSpotDataList.Count == 0)
         {
-            output += "No Data";
+            output += "No Data\n";
         }
         else{
             foreach(var data in blunderSpotDataList)
@@ -47,9 +47,6 @@ public class RatingData
                 output += $" {data}";
             }
         }
-
-
-
 
         return output;
     }
