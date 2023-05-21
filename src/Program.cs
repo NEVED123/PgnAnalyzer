@@ -6,8 +6,6 @@ class Program
 {
     static void Main(string[] args)
     {
-<<<<<<< HEAD
-=======
         if(args[0] == "help")
         {
             Console.WriteLine("Usage: {pathToPgn} [pathToExport] [exportName]");
@@ -50,7 +48,6 @@ class Program
         }
 
         Console.WriteLine($"Analysis Successful. Created {exportName}.txt at file path {pathToExport}");
->>>>>>> xml
 
     }
 }
