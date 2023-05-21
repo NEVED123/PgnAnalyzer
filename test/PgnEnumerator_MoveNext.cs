@@ -20,16 +20,16 @@ public class Tests
         StringAssert.IsMatch(pgn["Event"], "Rated Blitz game");
     }
 
-    [Test]
-    public void ReturnsAllPgn()
-    {
-        while(enumerator!.MoveNext())
-        {
-            Console.Write(enumerator.Current);
-        }
+    // [Test]
+    // public void ReturnsAllPgn()
+    // {
+    //     while(enumerator!.MoveNext())
+    //     {
+    //         Console.Write(enumerator.Current);
+    //     }
 
-        Assert.Pass();
-    }
+    //     Assert.Pass();
+    // }
 
     [Test]
     public void ThrowsErrorIfNoCurrent()

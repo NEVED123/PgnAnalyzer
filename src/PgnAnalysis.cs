@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using System.Globalization;
+using System.Linq;
 
 namespace PgnAnalyzer;
 
@@ -29,7 +30,7 @@ public class PgnAnalysis
                 currOpening = openings[openingIndex];
             }
             else{
-                currOpening = new OpeningData();
+                currOpening = new OpeningData(eco);
                 openings.Add(currOpening);
             }
    
@@ -73,14 +74,17 @@ public class PgnAnalysis
             List<OutOfBookData> currOutOfBookDataList = currRatingData.outOfBookDataList;
             
             string EcoMoveText = getStringFromEco(eco);
-            string afterBookMoveText = symmetricMoveDifference(EcoMoveText, moveText);
+            Console.WriteLine(EcoMoveText);
+            Console.WriteLine(moveText);
+            string afterBookMoveText = symmetricMoveDifference(moveText, EcoMoveText);
+            Console.WriteLine(afterBookMoveText);
             string firstAfterBookMoveSan = getFirstMoveSan(afterBookMoveText);
             int firstAfterBookMoveNum = getFirstMoveNum(afterBookMoveText);
 
             OutOfBookData currOutOfBookData;
-            int outOfBookDataIndex = currOutOfBookDataList.FindIndex(x => x.san == firstAfterBookMoveSan && x.moveNum == firstAfterBookMoveNum);
+            int outOfBookDataIndex = currOutOfBookDataList.FindIndex(x => (x.san == firstAfterBookMoveSan && x.moveNum == firstAfterBookMoveNum));
 
-            if(openingIndex >= 0)
+            if(outOfBookDataIndex >= 0)
             {   
                 currOutOfBookData = currOutOfBookDataList[outOfBookDataIndex];
             }
@@ -116,6 +120,7 @@ public class PgnAnalysis
 
                 currBlunderSpotData.count++;
             }
+
         }
 
         return openings;
@@ -130,7 +135,12 @@ public class PgnAnalysis
         {
             List<string> splitMoveText = moveText.Split(" ").ToList();
 
-            int firstBlunderIndex = splitMoveText.FindIndex(move => Regex.Match(move, @"^\s]*\?\?").Success);
+            // foreach(string eco in splitMoveText)
+            // {
+            //     Console.WriteLine(eco);
+            // }
+
+            int firstBlunderIndex = splitMoveText.FindIndex(move => Regex.Match(move, @"(.)*\?\?").Success);
 
             if(firstBlunderIndex != -1)
             {
@@ -153,7 +163,7 @@ public class PgnAnalysis
         {
             List<string> splitMoveText = moveText.Split(" ").ToList();
 
-            string? firstBlunder = splitMoveText.Find(move => Regex.Match(move, @"^\s]*\?\?").Success);
+            string? firstBlunder = splitMoveText.Find(move => Regex.Match(move, @"(.)*\?\?").Success);
 
             if(firstBlunder != null)
             {
@@ -166,9 +176,9 @@ public class PgnAnalysis
 
     public bool hasAnalysis(string moveText)
     {
-        string[] annoations = new string[]{"??", "?", "!", "?!", "!?", "!!"};
+        string[] analyses = new string[]{"??", "?", "!", "?!", "!?", "!!"};
 
-        if(annoations.Any(annotation => moveText.Contains(annotation)))
+        if(analyses.Any(analysis => moveText.Contains(analysis)))
         {
             return true;
         }
@@ -179,21 +189,42 @@ public class PgnAnalysis
     public string symmetricMoveDifference(string moveText, string ecoMoveText)
     {
 
-        for(int i = 0; i<moveText.Length;i++)
+        string modifiedMoveText = moveText;
+
+        if(hasAnalysis(moveText))
         {
-            if(moveText.ElementAt(i) != ecoMoveText.ElementAt(i))
-            {
-                return moveText.Substring(i);
-            }
+            modifiedMoveText = stripCommentsFromGame(moveText);
         }
 
-        return "";
+        List<string> splitMoveText = modifiedMoveText.Split(' ').ToList();
+
+        int splitEcoTextLength = ecoMoveText.Split(' ').Length;
+    
+        if(splitEcoTextLength < splitMoveText.Count())
+        {
+            splitMoveText.RemoveRange(0, splitEcoTextLength);
+        }
+        else
+        {
+            return "";
+        }
+        
+        string result = string.Join(' ', splitMoveText);
+
+        return result;
 
     }
 
     public string getFirstMoveSan(string moveText)
     {
-        string[] splitMoveText = moveText.Split(" ");
+        string modifiedMoveText = moveText;
+
+        if(hasAnalysis(modifiedMoveText))
+        {
+            modifiedMoveText = stripCommentsFromGame(moveText);
+        }
+
+        string[] splitMoveText = modifiedMoveText.Split(" ");
         
         foreach(string item in splitMoveText)
         {
@@ -211,17 +242,19 @@ public class PgnAnalysis
         string[] splitMoveText = moveText.Split(" ");
 
         //does not start with a number, find the next number and return that-1
-        for(int i = 1;i<splitMoveText.Length;i++)
+        for(int i = 0;i<splitMoveText.Length;i++)
         {
-            if(Regex.Match(splitMoveText[0], @"\d\.").Success)
+            if(Regex.Match(splitMoveText[i], @"\d\.").Success)
             {
+                string trimmed = splitMoveText[i].Trim('.');
+                
                 if(i == 0)
                 {
-                    return Int32.Parse(splitMoveText[i]);
+                    return Int32.Parse(trimmed);
                 }
                 else
                 {
-                    return Int32.Parse(splitMoveText[i])-1;
+                    return Int32.Parse(trimmed)-1;
                 }
             }
         }
@@ -233,39 +266,51 @@ public class PgnAnalysis
     {
         string output = Regex.Replace(moveText, @"\{[^{}]*\}", "");
 
-        Console.WriteLine("removed comments: " + output);
+        //Console.WriteLine("removed comments: " + output);
 
-        output = Regex.Replace(output, @"\.\.\.", ".");
+        output = Regex.Replace(output, @"\d\.\.\.", String.Empty);
+        
+        output = output.Replace("   ", " ");
+        output = output.Replace("  ", " ");
+        output = output.Trim(' ');
 
         return output;
     }
 
     public string getEcoFromString(string moveText)
     {
+
+        string moveTextNoPeriod = moveText.Replace(".", String.Empty);
         StreamReader sr = new StreamReader("eco.tsv");
 
         sr.ReadLine(); //burn header
 
         string? line = sr.ReadLine();
 
-        string largestSubstring = "";
+        string bestFitEco = "";
 
         while(line != null)
         {
             string[] splitLine = line.Split('\t');
 
+            string eco = splitLine[0];
             string ecoMoveText = splitLine[2];
 
-            if(moveText.Contains(ecoMoveText))
+            // Console.WriteLine(moveTextNoPeriod);
+            // Console.WriteLine(ecoMoveText);
+
+            if(moveTextNoPeriod.Contains(ecoMoveText))
             {
-                if(ecoMoveText.Length > largestSubstring.Length)
+                if(ecoMoveText.Length > bestFitEco.Length)
                 {
-                    largestSubstring = ecoMoveText;
+                    bestFitEco = eco;
                 }
             }
+
+            line = sr.ReadLine();
         }
 
-        return largestSubstring;
+        return bestFitEco;
     }
 
     public string getStringFromEco(string eco)
@@ -286,9 +331,11 @@ public class PgnAnalysis
             {
                 return splitLine[2];
             }
+
+            line = sr.ReadLine();
         }
 
-        return "";
+        throw new InvalidOperationException();
     }
 
     public string getResultFromString(string moveText)

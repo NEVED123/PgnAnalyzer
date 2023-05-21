@@ -1,6 +1,6 @@
 namespace PgnAnalyzer;
 
-public struct RatingData
+public class RatingData
 {
     public RatingData(int eloMin)
     {
@@ -14,7 +14,7 @@ public struct RatingData
 
     public List<OutOfBookData> outOfBookDataList {get; set;} = new List<OutOfBookData>();
     public List<BlunderSpotData> blunderSpotDataList {get; set;} = new List<BlunderSpotData>();
-    public int? eloMin {get; init;}
+    public int eloMin {get; init;}
     public int whiteWinNum {get; set;}
     public int blackWinNum {get; set;}
     public int drawNum {get; set;}
