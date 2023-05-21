@@ -10,4 +10,14 @@ public class BlunderSpotData
     
     public int moveNum {get; init;}
     public int count {get; set;}
+
+    public override string ToString()
+    {
+        string output = "";
+
+        output += $" Move Number: {moveNum}\n";
+        output += $" Count: {count}\n";
+
+        return output;
+    }
 }

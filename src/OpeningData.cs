@@ -11,12 +11,32 @@ public class OpeningData
     public int numGames {get; set;}
     public List<RatingData> ratingDataList {get; set;}
 
-    public void toString()
+    public override string ToString()
     {
-        Console.WriteLine("ECO: " + eco);
-        Console.WriteLine("Number of games with this opening: " + numGames);
-        Console.WriteLine("Rating Pools:");
+        string output = "";
+
+        output += $"ECO: {eco}\n";
+        output += $" Number of Games: {numGames}\n";
+        output += $"Rating Pools\n";
+
         foreach(RatingData ratingData in ratingDataList)
+        {
+            output += $"{ratingData}";
+        }
+
+        output += "\n";
+
+        return output;
+    }  
+}
+
+/*
+    private void printOpening(OpeningData data)
+    {
+        Console.WriteLine("ECO: " + data.eco);
+        Console.WriteLine("Number of games with this opening: " + data.numGames);
+        Console.WriteLine("Rating Pools:");
+        foreach(RatingData ratingData in data.ratingDataList)
         {
             Console.WriteLine(" Rating: " + ratingData.eloMin);
             Console.WriteLine(" White Win Number: " + ratingData.whiteWinNum);
@@ -36,5 +56,4 @@ public class OpeningData
                 Console.WriteLine("     Count: " + blunderSpotData.count);
             }
         }
-    }  
-}
+    }  */

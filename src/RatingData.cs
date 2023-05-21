@@ -18,4 +18,39 @@ public class RatingData
     public int whiteWinNum {get; set;}
     public int blackWinNum {get; set;}
     public int drawNum {get; set;}
+
+    public override string ToString()
+    {
+        string output = "";
+
+        output += $" Elo: >{eloMin}\n";
+        output += $" White wins: {whiteWinNum}\n";
+        output += $" Black wins: {blackWinNum}\n";
+        output += $" Draws: {drawNum}\n";
+
+        output += "Out Of Book Moves:\n"
+;
+        foreach(var data in outOfBookDataList)
+        {
+            output += $" {data}";
+        }
+
+        output += "Blunders: ";
+
+        if(blunderSpotDataList.Count == 0)
+        {
+            output += "No Data";
+        }
+        else{
+            foreach(var data in blunderSpotDataList)
+            {
+                output += $" {data}";
+            }
+        }
+
+
+
+
+        return output;
+    }
 }

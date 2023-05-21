@@ -74,10 +74,7 @@ public class PgnAnalysis
             List<OutOfBookData> currOutOfBookDataList = currRatingData.outOfBookDataList;
             
             string EcoMoveText = getStringFromEco(eco);
-            Console.WriteLine(EcoMoveText);
-            Console.WriteLine(moveText);
             string afterBookMoveText = symmetricMoveDifference(moveText, EcoMoveText);
-            Console.WriteLine(afterBookMoveText);
             string firstAfterBookMoveSan = getFirstMoveSan(afterBookMoveText);
             int firstAfterBookMoveNum = getFirstMoveNum(afterBookMoveText);
 
