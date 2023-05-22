@@ -1,6 +1,7 @@
-using System.Text.RegularExpressions;
+/*using System.Text.RegularExpressions;
 using System.Globalization;
 using System.Linq;
+using PgnAnalyzer.Utils; 
 
 namespace PgnAnalyzer;
 
@@ -420,4 +421,4 @@ public class PgnAnalysis
         }
     }
 
-}
+}*/

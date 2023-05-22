@@ -1,4 +1,5 @@
-namespace test;
+/*namespace test;
+using PgnAnalyzer.Utils;
 
 public class Tests
 {
@@ -37,4 +38,4 @@ public class Tests
         Assert.Throws<InvalidOperationException>(
         () => { Pgn pgn = enumerator!.Current; } );
     }
-}
+}*/

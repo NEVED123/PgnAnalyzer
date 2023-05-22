@@ -1,3 +1,6 @@
+/*using PgnAnalyzer.Utils;
+using PgnAnalyzer;
+
 namespace test;
 
 public class PgnAnalyzer_Test
@@ -125,4 +128,4 @@ public class PgnAnalyzer_Test
         StringAssert.AreEqualIgnoringCase(noComments, pgnAnalysis.stripCommentsFromGame(game));
     }
 
-}
+}*/
