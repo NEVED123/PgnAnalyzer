@@ -1,15 +1,16 @@
 using System.Collections;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
+using PgnAnalyzer.Utils;
 
-namespace PgnAnalyzer;
+namespace PgnAnalyzer.IO;
 
-public class PgnEnumerator : IEnumerator<Pgn>
+public class PgnReader : IEnumerator<Pgn>
 {
     private StreamReader sr;
     private Pgn? pgn;
 
-    public PgnEnumerator(string pathToPgn)
+    public PgnReader(string pathToPgn)
     {
         sr = new StreamReader(pathToPgn);
     }
