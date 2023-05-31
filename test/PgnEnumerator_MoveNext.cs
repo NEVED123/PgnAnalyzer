@@ -13,6 +13,17 @@ public class Tests
     }
 
     [Test]
+    public void ReadsGames()
+    {
+        while(reader!.MoveNext())
+        {
+            Console.WriteLine(reader.Current);
+        }
+
+        Assert.Pass();
+    }
+
+    [Test]
     public void ReturnsPgn()
     {
         reader!.MoveNext();

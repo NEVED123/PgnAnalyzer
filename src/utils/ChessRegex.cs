@@ -27,7 +27,5 @@ public class ChessRegex
     public static readonly string Analysis = @"[\??!?]{1,2}";
 
     public static readonly string Tag = @"\[[^\[\]]*\]";
-
-    
 }
 

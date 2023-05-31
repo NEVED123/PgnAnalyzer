@@ -52,7 +52,7 @@ public class PgnReader : IEnumerator<Pgn>
             return false;
         }
 
-        while(line != null && Regex.Match(line, @"\[(.*)\]").Success)
+        while(line != null && Regex.Match(line, ChessRegex.Tag).Success)
         {
             //we are reading a tag
 
@@ -72,13 +72,13 @@ public class PgnReader : IEnumerator<Pgn>
 
         string game = "";
 
-        while(line != null && Regex.Match(line, @"^[^\[](.*)(\d)(.*)[^\]]$").Success)
+        while(line != null && Regex.Matches(line, ChessRegex.Move).Count > 0)
         {
             game += line;
             line = sr.ReadLine();
         }
 
-        pgn["game"] = new Game(game);
+        pgn.game = new Game(game);
 
         return true;
     }
