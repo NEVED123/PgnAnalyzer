@@ -70,19 +70,15 @@ public class PgnReader : IEnumerator<Pgn>
 
         line = sr.ReadLine(); //burn whitespace between tags and game
 
+        string game = "";
+
         while(line != null && Regex.Match(line, @"^[^\[](.*)(\d)(.*)[^\]]$").Success)
         {
-            //we are reading a game - the regex is redundant here but for saftey
-            if(pgn.ContainsKey("game"))
-            {
-                pgn["game"] = pgn["game"] + line;
-            }
-            else{
-                pgn["game"] = line;
-            }
-
+            game += line;
             line = sr.ReadLine();
         }
+
+        pgn["game"] = new Game(game);
 
         return true;
     }

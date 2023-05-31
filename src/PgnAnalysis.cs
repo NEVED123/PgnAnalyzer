@@ -140,61 +140,11 @@ public class PgnAnalysis
     //ALL OF THESE METHODS HAVE BEEN MADE PUBLIC FOR TESTING. THIS IS BAD AND I SHOULDNT BE DOING IT, HOWEVER
     //THE ALTERNATIVE IS GETTING GOOD AND I'M FAR TOO LAZY FOR THAT.
 
-    public int getFirstBlunderNum(string moveText)
-    {
-        if(hasAnalysis(moveText))
-        {
-            List<string> splitMoveText = moveText.Split(" ").ToList();
-
-            // foreach(string eco in splitMoveText)
-            // {
-            //     Console.WriteLine(eco);
-            // }
-
-            int firstBlunderIndex = splitMoveText.FindIndex(move => Regex.Match(move, @"(.)*\?\?").Success);
-
-            if(firstBlunderIndex != -1)
-            {
-                string blunderNum = splitMoveText[firstBlunderIndex-1];
-
-                blunderNum = blunderNum.Trim('.');
-
-                int blunderNumInt = Int32.Parse(blunderNum);
-
-                return blunderNumInt;
-            }
-        }
-
-        return -1;
-    }
+q
 
     public string getFirstBlunder(string moveText)
     {
-        if(hasAnalysis(moveText))
-        {
-            List<string> splitMoveText = moveText.Split(" ").ToList();
 
-            string? firstBlunder = splitMoveText.Find(move => Regex.Match(move, @"(.)*\?\?").Success);
-
-            if(firstBlunder != null)
-            {
-                return firstBlunder.TrimEnd('?');
-            }
-        }
-
-        return "";
-    }
-
-    public bool hasAnalysis(string moveText)
-    {
-        string[] analyses = new string[]{"??", "?", "!", "?!", "!?", "!!"};
-
-        if(analyses.Any(analysis => moveText.Contains(analysis)))
-        {
-            return true;
-        }
-
-        return false;
     }
 
     public string symmetricMoveDifference(string moveText, string ecoMoveText)
@@ -224,71 +174,6 @@ public class PgnAnalysis
 
         return result;
 
-    }
-
-    public string getFirstMoveSan(string moveText)
-    {
-        string modifiedMoveText = moveText;
-
-        if(hasAnalysis(modifiedMoveText))
-        {
-            modifiedMoveText = stripCommentsFromGame(moveText);
-        }
-
-        string[] splitMoveText = modifiedMoveText.Split(" ");
-        
-        foreach(string item in splitMoveText)
-        {
-            if(!Regex.Match(item, @"\d\.").Success)
-            {
-                return item;
-            }
-        }
-
-        throw new InvalidOperationException();
-    }
-
-    public int getFirstMoveNum(string moveText)
-    {
-
-        string stripped = stripCommentsFromGame(moveText);
-
-        string[] splitMoveText = stripped.Split(" ");
-
-        //does not start with a number, find the next number and return that-1
-        for(int i = 0;i<splitMoveText.Length;i++)
-        {
-            if(Regex.Match(splitMoveText[i], @"\d\.").Success)
-            {
-                string trimmed = splitMoveText[i].Trim('.');
-                
-                if(i == 0)
-                {            
-                    return Int32.Parse(trimmed);
-                }
-                else
-                {
-                    return Int32.Parse(trimmed)-1;
-                }
-            }
-        }
-
-        return -1;
-    }
-
-    public string stripCommentsFromGame(string moveText)
-    {
-        string output = Regex.Replace(moveText, @"\{[^{}]*\}", "");
-
-        //Console.WriteLine("removed comments: " + output);
-
-        output = Regex.Replace(output, @"\d\.\.\.", String.Empty);
-        
-        output = output.Replace("   ", " ");
-        output = output.Replace("  ", " ");
-        output = output.Trim(' ');
-
-        return output;
     }
 
     public string getEcoFromString(string moveText)
@@ -350,20 +235,6 @@ public class PgnAnalysis
         }
 
         throw new InvalidOperationException();
-    }
-
-    public string getResultFromString(string moveText)
-    {
-       string[] splitMoveText = moveText.Split(" ");
-
-       string lastItem = splitMoveText[splitMoveText.Length-1];
-
-       if(lastItem == "1-0" || lastItem == "0-1" || lastItem == "1/2-1/2")
-       {
-            return lastItem;
-       }
-
-       return "";
     }
 
     public int getEloBasket(Pgn pgn)

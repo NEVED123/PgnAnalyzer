@@ -1,41 +1,31 @@
-/*namespace test;
+namespace test;
 using PgnAnalyzer.Utils;
+using PgnAnalyzer.IO;
 
 public class Tests
 {
-    PgnEnumerator? enumerator;
+    PgnReader? reader;
 
     [SetUp]
     public void Setup()
     {
-        enumerator = new PgnEnumerator("test.pgn");
+        reader = new PgnReader("test.pgn");
     }
 
     [Test]
     public void ReturnsPgn()
     {
-        enumerator!.MoveNext();
+        reader!.MoveNext();
 
-        Pgn pgn = enumerator.Current;
+        Pgn pgn = reader.Current;
 
-        StringAssert.IsMatch(pgn["Event"], "Rated Blitz game");
+        StringAssert.IsMatch((string)pgn["Event"], "Rated Blitz game");
     }
-
-    // [Test]
-    // public void ReturnsAllPgn()
-    // {
-    //     while(enumerator!.MoveNext())
-    //     {
-    //         Console.Write(enumerator.Current);
-    //     }
-
-    //     Assert.Pass();
-    // }
 
     [Test]
     public void ThrowsErrorIfNoCurrent()
     {
         Assert.Throws<InvalidOperationException>(
-        () => { Pgn pgn = enumerator!.Current; } );
+        () => { Pgn pgn = reader!.Current; } );
     }
-}*/
+}
