@@ -5,6 +5,9 @@ using PgnAnalyzer.Utils;
 
 namespace PgnAnalyzer.IO;
 
+/*
+NOTE: ALL TAGS, EXCLUDING THE MOVETEXT, WILL BE READ AS STRINGS BY DEFAULT.
+*/
 public class PgnReader : IEnumerator<Pgn>
 {
     private StreamReader sr;
