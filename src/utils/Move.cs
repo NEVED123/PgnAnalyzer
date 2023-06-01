@@ -42,7 +42,6 @@ public class Move{
             moveNum = int.Parse(temp);
         }
         
-
         //if the move is valid, plys.count == 2
         MatchCollection plys = Regex.Matches(moveString, ChessRegex.Ply);
 
@@ -64,6 +63,24 @@ public class Move{
     public Ply? blackPly {get; set;}
     public int? moveNum {get; set;}
 
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as Move);
+    }
+
+    public bool Equals(Move? obj)
+    {
+        return obj != null 
+        && this.whitePly == obj.whitePly
+        && this.blackPly == obj.blackPly
+        && this.moveNum == obj.moveNum;
+    }
+
+    public override int GetHashCode()
+    {
+        return (whitePly, blackPly, moveNum).GetHashCode();
+    }
+    
     public override string ToString(){
 
         string output = "";

@@ -38,6 +38,23 @@ public class Game
         return output;
     }
 
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as Game);
+    }
+
+    public bool Equals(Game? obj)
+    {
+        return obj != null 
+        && this.result == obj.result 
+        && this.moves.SequenceEqual(obj.moves);
+    }
+
+    public override int GetHashCode()
+    {
+        return (moves, result).GetHashCode();
+    }
+
     public static Game Parse(string game)
     {
         if(!Regex.Match(game, ChessRegex.Game).Success)

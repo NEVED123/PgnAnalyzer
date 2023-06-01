@@ -47,6 +47,24 @@ public class Ply{
         return new Ply(san, analysis, annotation);
     }
 
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as Ply);
+    }
+
+    public bool Equals(Ply? obj)
+    {
+        return obj != null 
+        && this.san == obj.san 
+        && this.annotation == obj.annotation 
+        && this.analysis == this.analysis;
+    }
+
+    public override int GetHashCode()
+    {
+        return (san, annotation, analysis).GetHashCode();
+    }
+
     public string san {get; set;}
     public string? annotation {get; set;}
     public string? analysis {get; set;}
