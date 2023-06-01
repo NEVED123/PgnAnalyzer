@@ -1,6 +1,6 @@
 using PgnAnalyzer.Utils;
 
-namespace PgnAnalyzer.Data;
+namespace PgnAnalyzer.Analyzer;
 
 public interface IAnalyzer
 {

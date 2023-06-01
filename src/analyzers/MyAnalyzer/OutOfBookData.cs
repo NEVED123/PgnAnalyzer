@@ -1,4 +1,4 @@
-namespace PgnAnalyzer;
+namespace PgnAnalyzer.Analyzer;
 
 public class OutOfBookData
 {
