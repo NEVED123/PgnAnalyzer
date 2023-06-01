@@ -9,7 +9,7 @@ public class EcoReader
     }
 
     private string filepath;
-    private StreamReader sr;
+    private StreamReader? sr;
 
     public List<Move>? getMovesFromEco(string eco)
     {
