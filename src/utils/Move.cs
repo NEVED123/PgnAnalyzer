@@ -4,6 +4,10 @@ namespace PgnAnalyzer.Utils;
 
 public class Move{
 
+    public Ply? whitePly {get; set;}
+    public Ply? blackPly {get; set;}
+    public int? moveNum {get; set;}
+
     public Move(Ply? whitePly, Ply? blackPly, int? moveNum){
 
         if(whitePly == null && blackPly == null)
@@ -25,45 +29,7 @@ public class Move{
         this.moveNum = move.moveNum; 
     }
 
-    public static Move Parse(string moveString)
-    {
-        if(!Regex.Match(moveString, ChessRegex.Move).Success)
-        {
-            throw new InvalidDataException($"Move \"{moveString}\" is not in a valid PGN format");
-        }
-
-        int? moveNum = null;
-
-        Match moveNumMatch = Regex.Match(moveString, ChessRegex.MoveNum);
-
-        if(moveNumMatch.Success)
-        {
-            string temp = moveNumMatch.Value.Trim(new char[]{' ', '.'});
-            moveNum = int.Parse(temp);
-        }
-        
-        //if the move is valid, plys.count == 2
-        MatchCollection plys = Regex.Matches(moveString, ChessRegex.Ply);
-
-        Ply? blackPly = null;
-        Ply? whitePly = null;
-
-        whitePly = new Ply(plys[0].Value.Trim(' '));
-
-        if(plys.Count == 2)
-        {
-            blackPly = new Ply(plys[1].Value.Trim(' '));
-        }
-
-
-        return new Move(whitePly, blackPly, moveNum);
-    }
-    
-    public Ply? whitePly {get; set;}
-    public Ply? blackPly {get; set;}
-    public int? moveNum {get; set;}
-
-    public override bool Equals(object? obj)
+       public override bool Equals(object? obj)
     {
         return Equals(obj as Move);
     }
@@ -113,4 +79,40 @@ public class Move{
         return output;
     }
 
+    public static Move Parse(string moveString)
+    {
+        if(!Regex.Match(moveString, ChessRegex.Move).Success)
+        {
+            throw new InvalidDataException($"Move \"{moveString}\" is not in a valid PGN format");
+        }
+
+        int? moveNum = null;
+
+        Match moveNumMatch = Regex.Match(moveString, ChessRegex.MoveNum);
+
+        if(moveNumMatch.Success)
+        {
+            string temp = moveNumMatch.Value.Trim(new char[]{' ', '.'});
+            moveNum = int.Parse(temp);
+        }
+        
+        //if the move is valid, plys.count == 2
+        MatchCollection plys = Regex.Matches(moveString, ChessRegex.Ply);
+
+        Ply? blackPly = null;
+        Ply? whitePly = null;
+
+        whitePly = new Ply(plys[0].Value.Trim(' '));
+
+        if(plys.Count == 2)
+        {
+            blackPly = new Ply(plys[1].Value.Trim(' '));
+        }
+
+        return new Move(whitePly, blackPly, moveNum);
+    }
+    
+
+
+ 
 }

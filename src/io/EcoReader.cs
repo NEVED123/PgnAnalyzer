@@ -48,16 +48,15 @@ public class EcoReader
         sr = new StreamReader(filepath);
 
         //strip down list moves to a string that is equal to the eco file
+        List<Move> simplifiedMoves = simplifyMoves(moves);
+
         string movesString = "";
 
-        foreach(Move move in moves)
+        foreach(Move move in simplifiedMoves)
         {
-            movesString += move.ToString() + " ";
+            movesString += $"{move} ";
         }
 
-        movesString = Regex.Replace(movesString, ChessRegex.Annotation, String.Empty);
-        movesString = Regex.Replace(movesString, ChessRegex.Analysis, String.Empty);
-        movesString = Regex.Replace(movesString, ChessRegex.BlackMoveNum, String.Empty);
         movesString = movesString.Replace(".",String.Empty);
 
         sr.ReadLine(); //burn header
@@ -88,5 +87,33 @@ public class EcoReader
         sr.Close();
 
         return bestFitEco;
+    }
+
+    public static List<Move> simplifyMoves(List<Move> moves)
+    {
+        List<Move> result = new List<Move>();
+
+        foreach(Move move in moves)
+        {   
+            Ply? whiteSan = null;
+
+            if(move.whitePly != null)
+            {
+                whiteSan = new Ply(move.whitePly.san, null, null);
+            }
+           
+            Ply? blackPly = null;
+
+            if(move.blackPly != null)
+            {
+                blackPly = new Ply(move.blackPly.san, null, null);
+            }
+
+            Move simpleMove = new Move(whiteSan, blackPly, move.moveNum);
+
+            result.Add(simpleMove);
+        }
+
+        return result;
     }
 }

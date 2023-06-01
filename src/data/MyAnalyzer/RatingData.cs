@@ -7,6 +7,7 @@ public class RatingData
         whiteWinNum = 0;
         blackWinNum = 0;
         drawNum = 0;
+        noResultDataNum = 0;
         outOfBookDataList = new List<OutOfBookData>();
         blunderSpotDataList = new List<BlunderSpotData>();
         this.eloMin = eloMin;
@@ -18,6 +19,7 @@ public class RatingData
     public int whiteWinNum {get; set;}
     public int blackWinNum {get; set;}
     public int drawNum {get; set;}
+    public int noResultDataNum {get; set;}
 
     public override string ToString()
     {
