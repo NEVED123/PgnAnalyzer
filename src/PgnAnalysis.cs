@@ -140,12 +140,7 @@ public class PgnAnalysis
     //ALL OF THESE METHODS HAVE BEEN MADE PUBLIC FOR TESTING. THIS IS BAD AND I SHOULDNT BE DOING IT, HOWEVER
     //THE ALTERNATIVE IS GETTING GOOD AND I'M FAR TOO LAZY FOR THAT.
 
-q
 
-    public string getFirstBlunder(string moveText)
-    {
-
-    }
 
     public string symmetricMoveDifference(string moveText, string ecoMoveText)
     {
@@ -174,67 +169,6 @@ q
 
         return result;
 
-    }
-
-    public string getEcoFromString(string moveText)
-    {
-
-        string moveTextNoPeriod = moveText.Replace(".", String.Empty);
-        StreamReader sr = new StreamReader("eco.tsv");
-
-        sr.ReadLine(); //burn header
-
-        string? line = sr.ReadLine();
-
-        string bestFitEco = "A00";
-
-        while(line != null)
-        {
-            string[] splitLine = line.Split('\t');
-
-            string eco = splitLine[0];
-            string ecoMoveText = splitLine[2];
-
-            if(moveTextNoPeriod.Contains(ecoMoveText))
-            {
-                if(ecoMoveText.Length > bestFitEco.Length)
-                {
-                    bestFitEco = eco;
-                }
-            }
-
-            line = sr.ReadLine();
-        }
-
-        sr.Close();
-
-        return bestFitEco;
-    }
-
-    public string getStringFromEco(string eco)
-    {
-        StreamReader sr = new StreamReader("eco.tsv");
-
-        sr.ReadLine(); //burn header
-
-        string? line = sr.ReadLine();
-
-        while(line != null)
-        {
-            string[] splitLine = line.Split('\t');
-
-            string ecoFromFile = splitLine[0];
-
-            if(ecoFromFile == eco)
-            {
-                sr.Close();
-                return splitLine[2];
-            }
-
-            line = sr.ReadLine();
-        }
-
-        throw new InvalidOperationException();
     }
 
     public int getEloBasket(Pgn pgn)

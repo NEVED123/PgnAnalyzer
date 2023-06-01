@@ -4,7 +4,13 @@ namespace PgnAnalyzer.Utils;
 
 public class Move{
 
-    public Move(Ply whitePly, Ply? blackPly, int moveNum){
+    public Move(Ply? whitePly, Ply? blackPly, int? moveNum){
+
+        if(whitePly == null && blackPly == null)
+        {
+            throw new InvalidDataException("White Ply and Black Ply cannot both be null");
+        }
+
         this.whitePly = whitePly;
         this.blackPly = blackPly;
         this.moveNum = moveNum;
@@ -19,22 +25,29 @@ public class Move{
         this.moveNum = move.moveNum; 
     }
 
-    private Move Parse(string moveString)
+    public static Move Parse(string moveString)
     {
         if(!Regex.Match(moveString, ChessRegex.Move).Success)
         {
-            throw new InvalidDataException("Move is not in a valid PGN format");
+            throw new InvalidDataException($"Move \"{moveString}\" is not in a valid PGN format");
         }
 
-        string moveNum = Regex.Match(moveString, ChessRegex.MoveNum).Value;
+        int? moveNum = null;
 
-        moveNum = moveNum.Trim(new char[]{' ', '.'});
+        Match moveNumMatch = Regex.Match(moveString, ChessRegex.MoveNum);
+
+        if(moveNumMatch.Success)
+        {
+            string temp = moveNumMatch.Value.Trim(new char[]{' ', '.'});
+            moveNum = int.Parse(temp);
+        }
+        
 
         //if the move is valid, plys.count == 2
         MatchCollection plys = Regex.Matches(moveString, ChessRegex.Ply);
 
         Ply? blackPly = null;
-        Ply whitePly;
+        Ply? whitePly = null;
 
         whitePly = new Ply(plys[0].Value.Trim(' '));
 
@@ -43,30 +56,44 @@ public class Move{
             blackPly = new Ply(plys[1].Value.Trim(' '));
         }
 
-        return new Move(whitePly, blackPly, int.Parse(moveNum));
+
+        return new Move(whitePly, blackPly, moveNum);
     }
     
-    public Ply whitePly {get; set;}
+    public Ply? whitePly {get; set;}
     public Ply? blackPly {get; set;}
     public int? moveNum {get; set;}
 
     public override string ToString(){
 
-        string firstPly = $"{moveNum}. {whitePly}";
+        string output = "";
 
-        string secondPly = "";
+        if(moveNum != null && whitePly != null)
+        {
+            output += $"{moveNum}. ";
+        }
+
+        if(whitePly != null)
+        {
+            output += $"{whitePly}";
+        }
 
         if(blackPly != null)
         {
-            secondPly = $" {blackPly}";
-
-            if(whitePly.annotation != null)
-            {
-                secondPly = $" {moveNum}..." + secondPly; 
-            }
+            output += " ";
         }
 
-        return firstPly + secondPly; 
+        if(moveNum != null && blackPly != null && (whitePly == null || whitePly.annotation != null))
+        {
+            output += $"{moveNum}... ";
+        }
+
+        if(blackPly != null)
+        {
+            output += $"{blackPly}";
+        }
+
+        return output;
     }
 
 }

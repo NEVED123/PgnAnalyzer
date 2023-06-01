@@ -2,7 +2,7 @@ namespace test;
 using PgnAnalyzer.Utils;
 using PgnAnalyzer.IO;
 
-public class Tests
+public class PgnReader_Test
 {
     PgnReader? reader;
 
@@ -17,7 +17,7 @@ public class Tests
     {
         while(reader!.MoveNext())
         {
-            Console.WriteLine(reader.Current);
+            //Console.WriteLine(reader.Current);
         }
 
         Assert.Pass();

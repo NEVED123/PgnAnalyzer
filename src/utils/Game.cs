@@ -19,7 +19,7 @@ public class Game
     }
 
     public string? result {get; set;}
-    private List<Move> moves {get;}
+    public List<Move> moves {get;}
 
     public override string ToString()
     {
@@ -42,7 +42,7 @@ public class Game
     {
         if(!Regex.Match(game, ChessRegex.Game).Success)
         {
-            throw new InvalidDataException("Game is not in a valid PGN format");
+            throw new InvalidDataException("Game \"{game}\" is not in a valid PGN format");
         }
 
         string? gameResult = null;

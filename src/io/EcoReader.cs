@@ -1,14 +1,20 @@
+using PgnAnalyzer.Utils;
+using System.Text.RegularExpressions;
+
 public class EcoReader
 {
-    public EcoReader(string filePath)
+    public EcoReader(string filepath)
     {
-        sr = new StreamReader(filePath);
+        this.filepath = filepath;
     }
 
+    private string filepath;
     private StreamReader sr;
 
-    public string getStringFromEco(string eco)
+    public List<Move>? getMovesFromEco(string eco)
     {
+        sr = new StreamReader(filepath);
+
         sr.ReadLine(); //burn header
 
         string? line = sr.ReadLine();
@@ -22,18 +28,37 @@ public class EcoReader
             if(ecoFromFile == eco)
             {
                 sr.Close();
-                return splitLine[2];
+                return Game.Parse(splitLine[2]).moves;
             }
 
             line = sr.ReadLine();
         }
 
-        throw new InvalidOperationException();
+        return null;
     }
 
-    public string getEcoFromString(string moveText)
+    public string getEcoFromMoves(List<Move>? moves)
     {
-        string moveTextNoPeriod = moveText.Replace(".", String.Empty);
+        if(moves == null)
+        {   
+            //Unknown opening
+            return "A00";
+        }
+
+        sr = new StreamReader(filepath);
+
+        //strip down list moves to a string that is equal to the eco file
+        string movesString = "";
+
+        foreach(Move move in moves)
+        {
+            movesString += move.ToString() + " ";
+        }
+
+        movesString = Regex.Replace(movesString, ChessRegex.Annotation, String.Empty);
+        movesString = Regex.Replace(movesString, ChessRegex.Analysis, String.Empty);
+        movesString = Regex.Replace(movesString, ChessRegex.BlackMoveNum, String.Empty);
+        movesString = movesString.Replace(".",String.Empty);
 
         sr.ReadLine(); //burn header
 
@@ -49,7 +74,7 @@ public class EcoReader
             string eco = splitLine[0];
             string ecoMoveText = splitLine[2];
 
-            if(moveTextNoPeriod.Contains(ecoMoveText))
+            if(movesString.Contains(ecoMoveText))
             {
                 if(ecoMoveText.Length > bestFitEco.Length)
                 {
@@ -64,6 +89,4 @@ public class EcoReader
 
         return bestFitEco;
     }
-
-
 }

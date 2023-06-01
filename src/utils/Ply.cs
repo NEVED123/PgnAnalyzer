@@ -17,11 +17,11 @@ public class Ply{
         this.analysis = ply.analysis;
     }
 
-    private Ply Parse(string plyString)
+    public static Ply Parse(string plyString)
     {
         if(!Regex.Match(plyString, ChessRegex.Ply).Success)
         {
-            throw new InvalidDataException("ply is not in proper PGN form");
+            throw new InvalidDataException("ply \"{plyString}\" is not in proper PGN form");
         }
 
         string san = Regex.Match(plyString, ChessRegex.SanMove).Value.Trim(' '); 
