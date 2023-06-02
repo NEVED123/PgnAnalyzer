@@ -479,6 +479,7 @@ $RECYCLE.BIN/
 *.pgn
 !test.pgn
 
-test.xml
+results.xml
 results.txt
-test.json
+results.json
+
