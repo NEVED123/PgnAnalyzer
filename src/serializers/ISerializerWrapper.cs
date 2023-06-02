@@ -1,4 +1,4 @@
-namespace PgnAnalyzer.IO;
+namespace PgnAnalyzer.Serializer;
 
 public interface ISerializerWrapper
 {

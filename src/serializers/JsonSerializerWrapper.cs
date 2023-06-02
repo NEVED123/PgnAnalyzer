@@ -2,6 +2,8 @@ using System.Text.Json.Serialization;
 using System.Text.Json;
 using PgnAnalyzer.IO;
 
+namespace PgnAnalyzer.Serializer;
+
 public class JsonSerializerWrapper : ISerializerWrapper
 {
     public void Serialize(string filename, object obj)

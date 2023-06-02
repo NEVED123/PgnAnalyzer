@@ -1,6 +1,7 @@
 using PgnAnalyzer.IO;
 using System.Xml.Serialization;
 
+namespace PgnAnalyzer.Serializer;
 public class XmlSerializerWrapper : ISerializerWrapper
 {
     public void Serialize(string filename, object obj)

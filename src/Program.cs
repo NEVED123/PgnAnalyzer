@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using System.Reflection;
 using PgnAnalyzer.Analyzer;
+using PgnAnalyzer.Serializer;
+using PgnAnalyzer.IO;
 
 namespace PgnAnalyzer;
 
@@ -8,14 +10,8 @@ class Program
 {
     static void Main(string[] args)
     {
-        string[] argsLower = new string[args.Length];
-
-        for(int i = 0;i<args.Length;i++)
-        {
-            argsLower[i] = args[i].ToLower();
-        }
-
-        if(argsLower.Contains("help"))
+        //arg handling
+        if(args.Any(arg => arg.ToLower() == "help"))
         {
             showHelpMenu();
             return;
@@ -23,11 +19,13 @@ class Program
 
         string analyzer = "";
         string format = "";
+        string pgnPath = "";
 
         try
         {
             analyzer = args[0]; 
-            format = argsLower[1];
+            format = args[1];
+            pgnPath = args[2];
         }
         catch
         {
@@ -37,27 +35,26 @@ class Program
             return;
         }
 
-        string name = "results";
-
-        if(args.Contains("--name") || args.Contains("-n"))
+        //Configure args
+        if(analyzer.Substring(analyzer.Length-3) == ".cs")
         {
-            try
-            {
-                name = args[args.ToList().IndexOf("--name")+1];
-            }
-            catch
-            {
-                Console.WriteLine("WARNING: File name not found. File name set to results");
-            }
+            analyzer = analyzer.Replace(".cs", String.Empty);
         }
 
-        string path = Directory.GetCurrentDirectory() + "";
+        format = format[0].ToString().ToUpper() + format.Substring(1).ToLower(); //capital case
+        pgnPath = Path.GetFullPath(pgnPath);
 
-        if(args.Contains("--path")|| args.Contains("-p"))
+        //Options
+
+        string exportPath = Directory.GetCurrentDirectory() + @"\results";
+
+        if(args.Contains("--export")|| args.Contains("-e"))
         {
+            string flag = args.Contains("--export") ? "--export" : "-e";
             try
             {
-                name = args[args.ToList().IndexOf("--name")+1];
+                string input = args[args.ToList().IndexOf(flag)+1];
+                exportPath = Path.GetFullPath(input);
             }
             catch
             {
@@ -65,43 +62,75 @@ class Program
             }
         }
 
-        IAnalyzer? analyzerClass;
+        IAnalyzer analyzerClass;
 
-        Type? type = Type.GetType(analyzer);
+        Type? analyzerType = Type.GetType($"PgnAnalyzer.Analyzer.{analyzer}");
 
-        if(type == null)
+        if(analyzerType == null)
         {
-            Console.WriteLine("\nAnalyzer Class not found. Aborting analysis.\n");
+            Console.WriteLine("\nAnalyzer Class not found. Make sure the class is in the PgnAnalyzer.Analyzer namespace, and note that class names are case sensitive. Aborting analysis.\n");
             return;
         }
 
-        // analyzerClass = (IAnalyzer?)Activator.CreateInstance(type);
+        try
+        {
+           analyzerClass = (IAnalyzer)Activator.CreateInstance(analyzerType)!;
+        }
+        catch
+        {
+            Console.WriteLine("Class could not be instantiated. Make sure the class implements IAnalyzer. Aborting Analysis.");
+            return;
+        }
+
+        ISerializerWrapper serializer;
+
+        Type? serializerType = Type.GetType($"PgnAnalyzer.Serializer.{format}SerializerWrapper");
         
-        // Console.WriteLine(analyzerClass);
+        if(serializerType == null)
+        {
+            Console.WriteLine("\nFormatter Class not found. Make sure the class is in the PgnAnalyzer.Serializer namespace, and be sure that the class name should be in the format '[YOUR FILE TYPE]SerializerWrapper. Aborting analysis.\n");
+            return;
+        }
 
-        //find file, make instance of that
+        try
+        {
+           serializer = (ISerializerWrapper)Activator.CreateInstance(serializerType)!;
+        }
+        catch
+        {
+            Console.WriteLine("Class could not be instantiated. Make sure the class implements ISerializerWrapper. Aborting Analysis.");
+            return;
+        }
 
+        PgnReader reader = new PgnReader(pgnPath);
 
-        //foreach(game in pgn)
-        //  dataclass.addGame(game)
+        while(reader.MoveNext())
+        {
+            analyzerClass.addGame(reader.Current);
+        }
 
-        //Initialize proper serializer
-
-        //dataclass.getresults
-
-        //make file
+        try
+        {
+            serializer.Serialize(exportPath, analyzerClass.getResults());
+            Console.WriteLine($"Analysis successful. Exported at {exportPath}.{format.ToLower()}");
+        }
+        catch
+        {
+            Console.WriteLine("Failed to export results. Aborting Analysis");
+        }
+        
     }
 
     private static void showHelpMenu()
     {
         Console.WriteLine("\nExecute PgnAnalyzer.\n");
-        Console.WriteLine("Usage: {dotnet run} analyzer_class file_format [options] OR help\n");
+        Console.WriteLine("Usage: {dotnet run} <analyzer_class file_format path_to_pgn [options]> | help\n");
         Console.WriteLine("Arguments:\n");
         Console.WriteLine(" analyzer_class    Name of the class to use for analysis.\n");
         Console.WriteLine(" file_format    Format of the exported file.\n");
+        Console.WriteLine(" path_to_pgn    Path and name of pgn file to analyze");
         Console.WriteLine("Options:\n");
+        Console.WriteLine(" -e, --export <FILE_PATH>    Location and name of the exported file.\n");
         Console.WriteLine(" help    Show command line help.\n");
-        Console.WriteLine(" -n, --name <FILE_NAME>    Name of the exported file.\n");
-        Console.WriteLine(" -p, --path <FILE_PATH>    Location of the exported file.\n");
     }
 }
