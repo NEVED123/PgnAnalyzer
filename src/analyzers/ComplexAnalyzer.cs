@@ -87,7 +87,7 @@ public class ComplexAnalyzer : IAnalyzer
         int gameLength = game.moves.Count;
         int ecoLength = eco.moves!.Count;
 
-        if(gameLength <= ecoLength)
+        if(gameLength <= ecoLength || eco.moves.Count == 0)
         {
             return;
         }
@@ -95,6 +95,7 @@ public class ComplexAnalyzer : IAnalyzer
         Move lastMoveOfEco = eco.moves[ecoLength-1];
 
         Ply newPly;
+
 
         if(lastMoveOfEco.blackPly == null)
         {
