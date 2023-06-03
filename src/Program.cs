@@ -11,6 +11,13 @@ class Program
     static void Main(string[] args)
     {
         //arg handling
+        if(args.Length < 3)
+        {
+            Console.WriteLine("\nNot enough arguments. Cannot perform analysis.\n");
+            Console.WriteLine("Run '{dotnet run} help' for more information.");
+            return;
+        }
+
         if(args.Any(arg => arg.ToLower() == "pgnhelp"))
         {
             showHelpMenu();
@@ -23,22 +30,9 @@ class Program
             return;
         }
 
-        string analyzer = "";
-        string format = "";
-        string pgnPath = "";
-
-        try
-        {
-            analyzer = args[0]; 
-            format = args[1];
-            pgnPath = args[2];
-        }
-        catch
-        {
-            Console.WriteLine("\nArguments not understood. Aborting analysis.\n");
-            Console.WriteLine("Run '{dotnet run} help' for more information.");
-            return;
-        }
+        string analyzer = args[0]; 
+        string format = args[1];
+        string pgnPath = args[2];
 
         //Configure args
         if(analyzer.Substring(analyzer.Length-3) == ".cs")
@@ -53,8 +47,8 @@ class Program
         pgnPath = Path.GetFullPath(pgnPath);
 
         //Options
-
         string exportPath = Directory.GetCurrentDirectory() + @"\results";
+
 
         if(args.Contains("--export")|| args.Contains("-e"))
         {
@@ -109,7 +103,7 @@ class Program
         }
         catch
         {
-            Console.WriteLine("Class could not be instantiated. Make sure the class implements IAnalyzer. Aborting Analysis.");
+            Console.WriteLine("Class could not be instantiated. Make sure the class implements the IAnalyzer interface. Aborting Analysis.");
             return;
         }
 
@@ -156,8 +150,6 @@ class Program
         
     }
 
-
-//TODO: Figure out how to run this thing without a dumbass command
     private static void showHelpMenu()
     {
         Console.WriteLine("\nExecute PgnAnalyzer.\n");
