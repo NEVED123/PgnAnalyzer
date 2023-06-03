@@ -3,12 +3,43 @@ using PgnAnalyzer.IO;
 
 namespace PgnAnalyzer.Analyzer;
 
-//TODO: ADD ANNOTATIONS
-//TODO: ADD README
+/*
+    Example of a more involved analyzer class. If you have not yet, checkout SimpleAnalyzer.cs first.
+    The data will look like this:
+
+    Opening:
+        ECO:
+            Code: @##
+            Name: "Opening name"
+            Moves: Move list
+        Rating range: 0-1000
+            Number of games: #
+            White wins: #
+            Black wins: #
+            Draws: #
+            Unknown (No result information given in pgn): #
+            First moves out of book:
+                San: SAN
+                    Count: #
+                San: SAN
+                    Count: #
+                ...
+        Rating range: 1000-1500
+            Same as above
+        Rating range: 1500-2000
+            Same as above
+        Rating range: 2000+
+            Same as above
+
+    [For each unique opening]
+*/
+
 public class ComplexAnalyzer : IAnalyzer
 {
+    //Data object to be passed to serializer
     private List<OpeningData> openings = new List<OpeningData>();
 
+    //EcoReader aids in parsing and searching the eco file
     private EcoReader ecoReader = new EcoReader("eco.tsv");
 
     public void addGame(Pgn pgn)
@@ -21,6 +52,7 @@ public class ComplexAnalyzer : IAnalyzer
             return;
         }
 
+        //Util for Eco. 
         Eco? eco;
 
         if(pgn.ContainsKey("eco"))
@@ -32,12 +64,12 @@ public class ComplexAnalyzer : IAnalyzer
             eco = ecoReader.getEcoFromMoves(game.moves);
         }
 
-        //get appropiate openingData class
-
+        //get appropiate openingData class if it exists
         OpeningData? opening = openings.Find(opening => opening.eco.Equals(eco));
 
         if(opening == null)
         {
+            //We have not seen this opening yet, so add a new one to the list
             opening = new OpeningData();
             opening.eco = eco;
             openings.Add(opening);
@@ -45,9 +77,9 @@ public class ComplexAnalyzer : IAnalyzer
 
         opening.numGames++;
 
-        //rating data
+        //Now that we have the OpeningData object we want, we can start collecting rating data
 
-        int basket = getEloBasket(pgn); 
+        int basket = getEloBasket(pgn);
 
         List<RatingData> ratingDatas = opening.ratingDataList;
 
@@ -56,7 +88,7 @@ public class ComplexAnalyzer : IAnalyzer
         if(ratingData == null)
         {
             ratingData = new RatingData();
-            ratingData.eloMin = basket;
+            ratingData.eloMin = basket; //eloMin represents the bottom of the basket
             ratingDatas.Add(ratingData);
         }
 
@@ -78,11 +110,11 @@ public class ComplexAnalyzer : IAnalyzer
                 break;
         }
 
-        // //out of book data
+        //Out Of Book Data
 
         List<OutOfBookData> currOutOfBookDataList = ratingData.outOfBookDataList;
 
-        //get first ply out of book
+        //get First Ply out of book
 
         int gameLength = game.moves.Count;
         int ecoLength = eco.moves!.Count;
@@ -94,16 +126,16 @@ public class ComplexAnalyzer : IAnalyzer
 
         Move lastMoveOfEco = eco.moves[ecoLength-1];
 
+        //Util for Ply (Ply = One Turn, as opposed to a Move = White Turn and Black Turn)
         Ply newPly;
-
 
         if(lastMoveOfEco.blackPly == null)
         {
-            newPly = game.moves[ecoLength-1].blackPly!; //black made the first out of book move
+            newPly = game.moves[ecoLength-1].blackPly!; //Black made the first out of book move
         }
         else
         {
-            newPly = game.moves[ecoLength].whitePly!; //white made the first out of book move
+            newPly = game.moves[ecoLength].whitePly!; //White made the first out of book move
         }
 
         //SANitize ply
@@ -129,6 +161,7 @@ public class ComplexAnalyzer : IAnalyzer
         return openings;
     }
 
+    //Private helper methods
     private int getEloBasket(Pgn pgn)
     {
         int avgElo = getAverageRating(pgn);
@@ -154,25 +187,13 @@ public class ComplexAnalyzer : IAnalyzer
 
         if(pgn.ContainsKey("WhiteElo") && int.TryParse((string)pgn["WhiteElo"], out int n))
         {
-            try{
-                totalElo += int.Parse((string)pgn["WhiteElo"]);
-                numOfElos++;
-            }
-            catch
-            {
-                //Console.WriteLine("Invalid Elo: " + pgn["WhiteElo"]);
-            }
+            totalElo += int.Parse((string)pgn["WhiteElo"]);
+            numOfElos++;
         }
         if(pgn.ContainsKey("BlackElo") && int.TryParse((string)pgn["BlackElo"], out int m))
         {
-            try{
-                totalElo += int.Parse((string)pgn["BlackElo"]);
-                numOfElos++;
-            }
-            catch
-            {
-                //Console.WriteLine("Invalid Elo: " + pgn["BlackElo"]);
-            }
+            totalElo += int.Parse((string)pgn["BlackElo"]);
+            numOfElos++;
         }
 
         if(numOfElos != 0)

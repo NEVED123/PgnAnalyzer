@@ -1,4 +1,4 @@
-namespace PgnAnalyzer.MyTest; //<---Any test you write must be in the MyTest namespace to be run via "analyzertest"
+namespace PgnAnalyzer.MyTest; //<---Any test you write must be in the MyTest namespace to be run via "analyzer test"
 
 //This framework uses NUnit for testing. See https://github.com/nunit/nunit-csharp-samples
 

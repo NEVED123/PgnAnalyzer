@@ -6,7 +6,7 @@ using PgnAnalyzer.IO;
 
 namespace PgnAnalyzer;
 
-//TODO: MOVE ARG HANDLING TO SHELL AND BATCH SCRIPTS
+//TODO: ADD README
 class Program
 {
     static void Main(string[] args)
@@ -84,22 +84,6 @@ class Program
             finally
             {
                 Console.WriteLine("WARNING: Counter number not found. Defaulting to 10000.");
-            }
-        }
-
-        string pathToEco = Path.GetFullPath("eco.tsv");
-        
-        if(args.Contains("--eco")|| args.Contains("-e"))
-        {
-            string flag = args.Contains("--eco") ? "--eco" : "-e";
-            try
-            {
-                string input = args[args.ToList().IndexOf(flag)+1];
-                pathToEco = Path.GetFullPath(input);
-            }
-            catch
-            {
-                Console.WriteLine("WARNING: File path not found. Using eco.tsv in root directory.");
             }
         }
 
@@ -191,6 +175,5 @@ class Program
         Console.WriteLine("Options:\n");
         Console.WriteLine(" -x, --export <FILE_PATH>    Location and name of the exported file.\n");
         Console.WriteLine(" -c, --count <INTEGER>    Indicate analysis progress after this many games.\n");
-        Console.WriteLine(" -e, --eco <FILE-PATH>   Location and name of eco file. Must be a tsv file.\n");
     }
 }
