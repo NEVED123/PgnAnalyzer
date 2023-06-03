@@ -11,9 +11,15 @@ class Program
     static void Main(string[] args)
     {
         //arg handling
-        if(args.Any(arg => arg.ToLower() == "help"))
+        if(args.Any(arg => arg.ToLower() == "pgnhelp"))
         {
             showHelpMenu();
+            return;
+        }
+
+        if(args[0].ToLower() == "boop")
+        {
+            Console.Beep();
             return;
         }
 
@@ -29,9 +35,8 @@ class Program
         }
         catch
         {
-            Console.WriteLine("\nArguments not understood. Aborting analysis, commencing boop.\n");
+            Console.WriteLine("\nArguments not understood. Aborting analysis.\n");
             Console.WriteLine("Run '{dotnet run} help' for more information.");
-            Console.Beep();
             return;
         }
 
@@ -41,6 +46,9 @@ class Program
             analyzer = analyzer.Replace(".cs", String.Empty);
         }
 
+        //TODO: file extension issue
+        //TODO: file path issue
+        
         format = format[0].ToString().ToUpper() + format.Substring(1).ToLower(); //capital case
         pgnPath = Path.GetFullPath(pgnPath);
 
@@ -62,8 +70,28 @@ class Program
             }
         }
 
-        //TODO: Add option to count games in display
-        //TODO: Add "commencing analysis"
+        int progressCount = 10000;
+
+        if(args.Contains("--progress")|| args.Contains("-p"))
+        {
+            string flag = args.Contains("--progress") ? "--progress" : "-p";
+            try
+            {
+                progressCount = int.Parse(args[args.ToList().IndexOf(flag)+1]); 
+            }
+            catch(FormatException)
+            {
+                Console.WriteLine("WARNING: Progress counter number is not in the proper format. Defaulting to 10000.");
+            }
+            catch(OverflowException)
+            {
+                Console.WriteLine("WARNING: Progress counter number must be in the range of an integer. Defaulting to 10000.");
+            }
+            finally
+            {
+                Console.WriteLine("WARNING: Progress counter number not found. Defaulting to 10000.");
+            }
+        }
 
         IAnalyzer analyzerClass;
 
@@ -107,28 +135,41 @@ class Program
 
         PgnReader reader = new PgnReader(pgnPath);
 
+        Console.WriteLine("Beginning Analysis...");
+
+        int numGames = 0;
+
         while(reader.MoveNext())
         {
             analyzerClass.addGame(reader.Current);
+            numGames++;
+            if(numGames % progressCount == 0)
+            {
+                Console.WriteLine($"Number of games analyzed: {numGames}");
+            }
         }
 
-
         serializer.Serialize(exportPath, analyzerClass.getResults());
-        Console.WriteLine($"Analysis successful. Exported at {exportPath}.{format.ToLower()}");
-
+        Console.WriteLine("Analysis successful.");
+        Console.WriteLine($"Analyzed a total of {numGames} games.");
+        Console.WriteLine($"Exported at {exportPath}.{format.ToLower()}");
         
     }
 
+
+//TODO: Figure out how to run this thing without a dumbass command
     private static void showHelpMenu()
     {
         Console.WriteLine("\nExecute PgnAnalyzer.\n");
-        Console.WriteLine("Usage: {dotnet run} <analyzer_class file_format path_to_pgn [options]> | help\n");
+        Console.WriteLine("Usage: {dotnet run} <analyzer_class file_format path_to_pgn [options]> | pgnhelp | boop \n");
         Console.WriteLine("Arguments:\n");
         Console.WriteLine(" analyzer_class    Name of the class to use for analysis.\n");
         Console.WriteLine(" file_format    Format of the exported file.\n");
-        Console.WriteLine(" path_to_pgn    Path and name of pgn file to analyze");
+        Console.WriteLine(" path_to_pgn    Path and name of pgn file to analyze\n");
         Console.WriteLine("Options:\n");
         Console.WriteLine(" -e, --export <FILE_PATH>    Location and name of the exported file.\n");
-        Console.WriteLine(" help    Show command line help.\n");
+        Console.WriteLine(" -p, --progress <INTEGER>    Indicate analysis progress after this many games\n");
+        Console.WriteLine(" boop    Make a booping sound and abort. No real purpose, but kinda fun sometimes.\n");
+        Console.WriteLine(" pgnhelp    Show command line help.\n");
     }
 }

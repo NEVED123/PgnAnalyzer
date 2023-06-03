@@ -2,6 +2,8 @@ using PgnAnalyzer.Utils;
 
 namespace PgnAnalyzer.Analyzer;
 
+//TODO: ADD ANNOTATIONS
+//TODO: ADD README
 public class ComplexAnalyzer : IAnalyzer
 {
     private List<OpeningData> openings = new List<OpeningData>();
@@ -19,14 +21,6 @@ public class ComplexAnalyzer : IAnalyzer
         }
 
         string eco = pgn.ContainsKey("eco") ? (string)pgn["eco"] : this.eco.getEcoFromMoves(game.moves);
-
-         //if EcoMoveText = null, something has gone wrong with getEcoFromMoves() or the PGN itself
-        List<Move>? ecoMoves = this.eco.getMovesFromEco(eco);
-
-        if(ecoMoves == null)
-        {
-            ecoMoves = new List<Move>();
-        }
 
         //get appropiate openingData class
 
@@ -77,6 +71,15 @@ public class ComplexAnalyzer : IAnalyzer
         // //out of book data
 
         List<OutOfBookData> currOutOfBookDataList = ratingData.outOfBookDataList;
+
+        //if EcoMoveText = null, something has gone wrong with getEcoFromMoves() or the PGN itself
+        List<Move>? ecoMoves = this.eco.getMovesFromEco(eco);
+
+        
+        if(ecoMoves == null)
+        {
+            ecoMoves = new List<Move>();
+        }
 
         //get first ply out of book
 
