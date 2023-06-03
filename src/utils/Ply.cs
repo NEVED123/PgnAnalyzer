@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 namespace PgnAnalyzer.Utils;
 
 public class Ply{
-    public Ply(string san, string? analysis, string? annotation){
+    public Ply(string? san, string? analysis, string? annotation){
         this.san = san;
         this.annotation = annotation;
         this.analysis = analysis;

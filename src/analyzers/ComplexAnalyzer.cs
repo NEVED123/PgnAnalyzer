@@ -89,23 +89,23 @@ public class ComplexAnalyzer : IAnalyzer
         {
             return;
         }
-        
-        Ply newPly;
-
-        List<Move> simplifiedGame = Eco.SimplifyMoves(game.moves);
-
-        Move newMove = simplifiedGame[ecoLength-1];
 
         Move lastMoveOfEco = ecoMoves[ecoLength-1];
 
-        if(newMove.Equals(lastMoveOfEco))
+        Ply newPly;
+
+        if(lastMoveOfEco.blackPly == null)
         {
-            newPly = simplifiedGame[ecoLength].whitePly!;
+            newPly = game.moves[ecoLength-1].blackPly!; //black made the first out of book move
         }
         else
         {
-            newPly = newMove.blackPly!;
+            newPly = game.moves[ecoLength].whitePly!; //white made the first out of book move
         }
+
+        //SANitize ply
+        newPly.analysis = null;
+        newPly.annotation = null;
 
         List<OutOfBookData> outOfBookDatas = ratingData.outOfBookDataList;
         
