@@ -6,6 +6,7 @@ using PgnAnalyzer.IO;
 
 namespace PgnAnalyzer;
 
+//TODO: ADD OPTION FOR LOCATION OF ECO FILE
 class Program
 {
     static void Main(string[] args)

@@ -4,15 +4,29 @@ namespace PgnAnalyzer.Analyzer;
 
 public class OpeningData
 {
-    public string? eco {get; set;}
+    public Eco eco {get;set;} = new Eco();
     public int numGames {get; set;} = 0;
     public List<RatingData> ratingDataList {get; set;} = new List<RatingData>();
 
     public override string ToString()
     {
+        string ecoMoves = "";
+
+        if(eco.moves != null)
+        {
+            foreach(Move move in eco.moves)
+            {
+                ecoMoves += $"{move} ";
+            } 
+        }
+
+        ecoMoves = ecoMoves.Trim(' ');
+
         string output = "";
 
-        output += $"ECO: {eco}\n";
+        output += $"ECO: {eco.code} - {eco.name}\n";
+        output += $"Moves: {ecoMoves}";
+
         output += $" Number of Games: {numGames}\n";
 
 

@@ -2,6 +2,8 @@ using System.Text.RegularExpressions;
 
 namespace PgnAnalyzer.Utils;
 
+//TODO: ADD STATIC METHOD TO CONVERT LIST OF MOVES TO STRING
+
 public class Move{
 
     public Ply? whitePly {get; set;}

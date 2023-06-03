@@ -1,11 +1,11 @@
 using PgnAnalyzer.Utils;
 using System.Text.RegularExpressions;
 
-
+namespace PgnAnalyzer.IO;
 //TODO: RENAME THIS CLASS TO ECOREADER, AND CREATE AN ECO DATATYPE IN UTILS.
-public class Eco
+public class EcoReader
 {
-    public Eco(string filepath)
+    public EcoReader(string filepath)
     {
         this.filepath = filepath;
     }
@@ -13,7 +13,7 @@ public class Eco
     private string filepath;
     private StreamReader? sr;
 
-    public List<Move>? getMovesFromEco(string eco)
+    public Eco GetEcoFromCode(string code)
     {
         sr = new StreamReader(filepath);
 
@@ -25,26 +25,28 @@ public class Eco
         {
             string[] splitLine = line.Split('\t');
 
-            string ecoFromFile = splitLine[0];
+            string codeFromFile = splitLine[0];
 
-            if(ecoFromFile == eco)
+            if(codeFromFile == code)
             {
                 sr.Close();
-                return Game.Parse(splitLine[2]).moves;
+                string name = splitLine[1];
+                List<Move> moves = Game.Parse(splitLine[2]).moves;
+                return new Eco(code,name,moves);
             }
 
             line = sr.ReadLine();
         }
 
-        return null;
+        return new Eco("A00", "Unknown", null);
     }
 
-    public string getEcoFromMoves(List<Move>? moves)
+    public Eco getEcoFromMoves(List<Move>? moves)
     {
         if(moves == null)
         {   
             //Unknown opening
-            return "A00";
+            return new Eco("A00", "Unknown", null);
         }
 
         sr = new StreamReader(filepath);
@@ -66,20 +68,26 @@ public class Eco
         string? line = sr.ReadLine();
 
         //Eco for unknown opening
-        string bestFitEco = "A00";
+        string bestFitCode = "A00";
+        string bestFitName = "Unknown";
+        List<Move>? bestFitMoves = null;
+
 
         while(line != null)
         {
             string[] splitLine = line.Split('\t');
 
             string eco = splitLine[0];
+            string name = splitLine[1];
             string ecoMoveText = splitLine[2];
 
             if(movesString.Contains(ecoMoveText))
             {
-                if(ecoMoveText.Length > bestFitEco.Length)
+                if(ecoMoveText.Length > bestFitCode.Length)
                 {
-                    bestFitEco = eco;
+                    bestFitCode = eco;
+                    bestFitName = name;
+                    bestFitMoves = Game.Parse(ecoMoveText).moves;
                 }
             }
 
@@ -88,7 +96,7 @@ public class Eco
 
         sr.Close();
 
-        return bestFitEco;
+        return new Eco(bestFitCode, bestFitName, bestFitMoves);
     }
 
     public static List<Move> SimplifyMoves(List<Move> moves)

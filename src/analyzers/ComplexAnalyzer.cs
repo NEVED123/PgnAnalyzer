@@ -1,4 +1,5 @@
 using PgnAnalyzer.Utils;
+using PgnAnalyzer.IO;
 
 namespace PgnAnalyzer.Analyzer;
 
@@ -8,7 +9,7 @@ public class ComplexAnalyzer : IAnalyzer
 {
     private List<OpeningData> openings = new List<OpeningData>();
 
-    private Eco eco = new Eco("eco.tsv");
+    private EcoReader ecoReader = new EcoReader("eco.tsv");
 
     public void addGame(Pgn pgn)
     {
@@ -20,11 +21,20 @@ public class ComplexAnalyzer : IAnalyzer
             return;
         }
 
-        string eco = pgn.ContainsKey("eco") ? (string)pgn["eco"] : this.eco.getEcoFromMoves(game.moves);
+        Eco? eco;
+
+        if(pgn.ContainsKey("eco"))
+        {
+            eco = ecoReader.GetEcoFromCode((string)pgn["eco"]);
+        }
+        else
+        {
+            eco = ecoReader.getEcoFromMoves(game.moves);
+        }
 
         //get appropiate openingData class
 
-        OpeningData? opening = openings.Find(opening => opening.eco == eco);
+        OpeningData? opening = openings.Find(opening => opening.eco.Equals(eco));
 
         if(opening == null)
         {
@@ -72,25 +82,17 @@ public class ComplexAnalyzer : IAnalyzer
 
         List<OutOfBookData> currOutOfBookDataList = ratingData.outOfBookDataList;
 
-        //if EcoMoveText = null, something has gone wrong with getEcoFromMoves() or the PGN itself
-        List<Move>? ecoMoves = this.eco.getMovesFromEco(eco);
-  
-        if(ecoMoves == null)
-        {
-            ecoMoves = new List<Move>();
-        }
-
         //get first ply out of book
 
         int gameLength = game.moves.Count;
-        int ecoLength = ecoMoves.Count;
+        int ecoLength = eco.moves!.Count;
 
         if(gameLength <= ecoLength)
         {
             return;
         }
 
-        Move lastMoveOfEco = ecoMoves[ecoLength-1];
+        Move lastMoveOfEco = eco.moves[ecoLength-1];
 
         Ply newPly;
 
