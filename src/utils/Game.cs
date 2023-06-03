@@ -14,30 +14,38 @@ public class Game
         this.result = game.result;
     }
 
-    public Game(List<Move> moves, string? result)
+    public Game(List<Move>? moves, string? result)
     {
-        this.moves = moves;
+        if(moves != null)
+        {
+            this.moves = moves;
+        }
+        
         this.result = result;
     }
 
+    public Game(){}
+
     public string? result {get; set;}
-    public List<Move> moves {get;}
+    public List<Move> moves {get;} = new List<Move>();
 
     public override string ToString()
     {
         string output = "";
 
-        foreach(Move move in moves)
+        if(moves != null)
         {
-            output += $"{move} ";
+            foreach(Move move in moves)
+            {
+                output += $"{move} ";
+            }
         }
-
         if(result != null)
         {
             output += $"{result}";
         }
 
-        return output;
+        return output.Trim(' '); //Incase of no result
     }
 
     public override bool Equals(object? obj)
@@ -47,9 +55,22 @@ public class Game
 
     public bool Equals(Game? obj)
     {
-        return obj != null 
-        && this.result == obj.result 
-        && this.moves.SequenceEqual(obj.moves);
+        if(obj == null || this.result != obj.result)
+        {
+            return false; 
+        }
+
+        if(this.moves == null && obj.moves == null)
+        {
+            return true;
+        }
+
+        if(this.moves != null && obj.moves != null)
+        {
+            return this.moves.SequenceEqual(obj.moves);
+        }
+
+        return false;        
     }
 
     public override int GetHashCode()

@@ -9,12 +9,6 @@ public class Move{
     public int? moveNum {get; set;}
 
     public Move(Ply? whitePly, Ply? blackPly, int? moveNum){
-
-        if(whitePly == null && blackPly == null)
-        {
-            throw new InvalidDataException("White Ply and Black Ply cannot both be null");
-        }
-
         this.whitePly = whitePly;
         this.blackPly = blackPly;
         this.moveNum = moveNum;
@@ -28,6 +22,8 @@ public class Move{
         this.blackPly = move.blackPly;
         this.moveNum = move.moveNum; 
     }
+
+    public Move(){}
 
     public override bool Equals(object? obj)
     {
@@ -97,7 +93,7 @@ public class Move{
     {
         if(!Regex.Match(moveString, ChessRegex.Move).Success)
         {
-            throw new InvalidDataException($"Move \"{moveString}\" is not in a valid PGN format");
+            throw new InvalidDataException($"Move \"{moveString}\" is not in a valid PGN format.");
         }
 
         int? moveNum = null;

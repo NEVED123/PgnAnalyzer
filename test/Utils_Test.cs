@@ -2,6 +2,8 @@ namespace test;
 
 using PgnAnalyzer.Utils;
 
+//TODO: ADD SEPERATE TESTING FOLDER FOR USER WITH BASH SCRIPT THAT ONLY RUNS THOSE  
+
 public class Utils_Test
 {
     [Test]
@@ -31,6 +33,11 @@ public class Utils_Test
     [Test]
     public void gameParseTest()
     {
+        StringAssert.AreEqualIgnoringCase("1-0", new Game("1-0").ToString());
+        StringAssert.AreEqualIgnoringCase("", new Game("").ToString());
+
+        StringAssert.AreEqualIgnoringCase("e4 e5 Nf3 Nf6", new Game("e4 e5 Nf3 Nf6").ToString());
+
         StringAssert.AreEqualIgnoringCase(
             "1. d4 c5 2. Nf3 cxd4 3. Nxd4 e5 4. Nb3 d5 5. g3 Nf6 6. Bg2 Be6 7. O-O Nbd7 8. Bg5 Nb6 9. Nc3 d4 10. Ne4 Be7 11. Bxf6 Bxf6 12. Nxf6+ Qxf6 13. Bxb7 Rb8 14. Bc6+ Bd7 15. Bxd7+ Nxd7 16. e3 dxe3 17. fxe3 Qb6 18. Qd5 Qxe3+ 19. Kh1 Rd8 20. Qxf7# 1-0",
             new Game("1. d4 c5 2. Nf3 cxd4 3. Nxd4 e5 4. Nb3 d5 5. g3 Nf6 6. Bg2 Be6 7. O-O Nbd7 8. Bg5 Nb6 9. Nc3 d4 10. Ne4 Be7 11. Bxf6 Bxf6 12. Nxf6+ Qxf6 13. Bxb7 Rb8 14. Bc6+ Bd7 15. Bxd7+ Nxd7 16. e3 dxe3 17. fxe3 Qb6 18. Qd5 Qxe3+ 19. Kh1 Rd8 20. Qxf7# 1-0").ToString());
@@ -40,4 +47,27 @@ public class Utils_Test
 
     }
 
+    [Test]
+    public void gameEquals()
+    {
+        Game game1 = new Game("1. d4 c5 2. Nf3 cxd4 1-0");
+        Game game2 = new Game("1. d4 c5 2. Nf3 cxd4 1-0");
+
+        Game game3 = new Game("1. d4 c5 2. Nf3 cxd4");
+        Game game4 = new Game("1. d4 c5 2. Nf3 cxd4");
+
+        Game game5 = new Game(null, "1-0");
+        Game game6 = new Game(null, "1-0");
+
+        Game game7 = new Game("1-0");
+        Game game8 = new Game("1-0");
+
+        Assert.False(game1.Equals(game3));
+        Assert.False(game1.Equals(null));
+        Assert.True(game1.Equals(game2));
+        Assert.True(game3.Equals(game4));
+        Assert.True(game5.Equals(game6));
+        Assert.True(game7.Equals(game8));
+
+    }
 }

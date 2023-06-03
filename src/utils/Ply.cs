@@ -17,6 +17,12 @@ public class Ply{
         this.analysis = ply.analysis;
     }
 
+    public Ply(){}
+
+    public string? san {get; set;}
+    public string? annotation {get; set;}
+    public string? analysis {get; set;}
+
     public static Ply Parse(string plyString)
     {
         if(!Regex.Match(plyString, ChessRegex.Ply).Success)
@@ -65,24 +71,24 @@ public class Ply{
         return (san, annotation, analysis).GetHashCode();
     }
 
-    public string san {get; set;}
-    public string? annotation {get; set;}
-    public string? analysis {get; set;}
 
     public override string ToString(){
 
-        string output = san;
+        string output = "";
 
+        if(san != null)
+        {
+            output += san;
+        }
         if(analysis != null)
         {
             output += analysis;
         }
-
         if(annotation != null)
         {
             output += $" {annotation}";
         }
         
-        return output;
+        return output.Trim(' '); //Trims space in the case of only having an annotation
     }
 }   
