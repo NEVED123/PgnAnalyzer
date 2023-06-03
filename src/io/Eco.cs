@@ -1,9 +1,11 @@
 using PgnAnalyzer.Utils;
 using System.Text.RegularExpressions;
 
-public class EcoReader
+
+//TODO: RENAME THIS CLASS TO ECOREADER, AND CREATE AN ECO DATATYPE IN UTILS.
+public class Eco
 {
-    public EcoReader(string filepath)
+    public Eco(string filepath)
     {
         this.filepath = filepath;
     }
@@ -48,7 +50,7 @@ public class EcoReader
         sr = new StreamReader(filepath);
 
         //strip down list moves to a string that is equal to the eco file
-        List<Move> simplifiedMoves = simplifyMoves(moves);
+        List<Move> simplifiedMoves = SimplifyMoves(moves);
 
         string movesString = "";
 
@@ -89,7 +91,7 @@ public class EcoReader
         return bestFitEco;
     }
 
-    public static List<Move> simplifyMoves(List<Move> moves)
+    public static List<Move> SimplifyMoves(List<Move> moves)
     {
         List<Move> result = new List<Move>();
 

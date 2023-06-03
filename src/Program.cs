@@ -62,6 +62,9 @@ class Program
             }
         }
 
+        //TODO: Add option to count games in display
+        //TODO: Add "commencing analysis"
+
         IAnalyzer analyzerClass;
 
         Type? analyzerType = Type.GetType($"PgnAnalyzer.Analyzer.{analyzer}");
@@ -109,15 +112,10 @@ class Program
             analyzerClass.addGame(reader.Current);
         }
 
-        try
-        {
-            serializer.Serialize(exportPath, analyzerClass.getResults());
-            Console.WriteLine($"Analysis successful. Exported at {exportPath}.{format.ToLower()}");
-        }
-        catch
-        {
-            Console.WriteLine("Failed to export results. Aborting Analysis");
-        }
+
+        serializer.Serialize(exportPath, analyzerClass.getResults());
+        Console.WriteLine($"Analysis successful. Exported at {exportPath}.{format.ToLower()}");
+
         
     }
 

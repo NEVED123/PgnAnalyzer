@@ -10,6 +10,8 @@ NOTE: ALL TAGS, EXCLUDING THE MOVETEXT, WILL BE READ AS STRINGS BY DEFAULT.
 */
 public class PgnReader : IEnumerator<Pgn>
 {
+    //TODO: Allow pgn to deal with lack of spacing between tags and game
+    //TODO: Implement IEnumerable<T>, set up frame to allow users to use LINQ
     private StreamReader sr;
     private Pgn? pgn;
 

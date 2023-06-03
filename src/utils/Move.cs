@@ -29,17 +29,31 @@ public class Move{
         this.moveNum = move.moveNum; 
     }
 
-       public override bool Equals(object? obj)
+    public override bool Equals(object? obj)
     {
         return Equals(obj as Move);
     }
 
     public bool Equals(Move? obj)
     {
-        return obj != null 
-        && this.whitePly == obj.whitePly
-        && this.blackPly == obj.blackPly
-        && this.moveNum == obj.moveNum;
+        if(obj == null)
+        {
+            return false;
+        }
+
+        if(this.whitePly == null)
+        {
+            return obj.whitePly == null && 
+            this.blackPly!.Equals(obj.blackPly);
+        }
+        if(this.blackPly == null)
+        {
+            return obj.blackPly == null &&
+            this.whitePly.Equals(obj.whitePly);
+        }
+
+        return this.blackPly.Equals(obj.blackPly)
+        && this.whitePly.Equals(obj.whitePly);
     }
 
     public override int GetHashCode()
@@ -111,8 +125,17 @@ public class Move{
 
         return new Move(whitePly, blackPly, moveNum);
     }
-    
 
+    public static List<Ply?> ToPlyList(List<Move> moves)
+    {
+        List<Ply?> result = new List<Ply?>();
 
- 
+        foreach(Move move in moves)
+        {
+            result.Add(move.whitePly);
+            result.Add(move.blackPly);
+        }
+
+        return result;
+    }
 }

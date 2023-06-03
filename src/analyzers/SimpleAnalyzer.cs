@@ -6,7 +6,7 @@ public class SimpleAnalyzer : IAnalyzer
 {
     private int totalRatingPoints;
     private int numGames;
-    private double result;
+    public double result;
 
     public void addGame(Pgn pgn)
     {

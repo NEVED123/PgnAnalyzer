@@ -1,15 +1,12 @@
+using PgnAnalyzer.Utils;
+
 namespace PgnAnalyzer.Analyzer;
 
 public class OpeningData
 {
-    public OpeningData(string eco){
-        numGames = 0;
-        ratingDataList = new List<RatingData>();
-        this.eco = eco;
-    }
-    public string eco {get; init;}
-    public int numGames {get; set;}
-    public List<RatingData> ratingDataList {get; set;}
+    public string? eco {get; set;}
+    public int numGames {get; set;} = 0;
+    public List<RatingData> ratingDataList {get; set;} = new List<RatingData>();
 
     public override string ToString()
     {
@@ -17,8 +14,14 @@ public class OpeningData
 
         output += $"ECO: {eco}\n";
         output += $" Number of Games: {numGames}\n";
-        output += $"Rating Pools\n";
 
+
+        if(ratingDataList == null || ratingDataList.Count == 0)
+        {
+            return output;
+        }
+
+        output += $"Rating Pools\n";
         foreach(RatingData ratingData in ratingDataList)
         {
             output += $"{ratingData}";

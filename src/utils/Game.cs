@@ -2,6 +2,8 @@ using System.Text.RegularExpressions;
 
 namespace PgnAnalyzer.Utils;
 
+//TODO: Implement IEquatable or IEqualityComparer
+//TODO: Add paramaterless constructors to utils so they can be serialized.
 public class Game
 {
     public Game(string moveText)
