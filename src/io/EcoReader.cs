@@ -2,7 +2,8 @@ using PgnAnalyzer.Utils;
 using System.Text.RegularExpressions;
 
 namespace PgnAnalyzer.IO;
-//TODO: RENAME THIS CLASS TO ECOREADER, AND CREATE AN ECO DATATYPE IN UTILS.
+//TODO: Add validation that file is a proper eco file. (correct number of columns, moves can be parsed, etc.)
+//TODO: Add a static list of ECOs that gets filled with imported ECO list upon being initialized.
 public class EcoReader
 {
     public EcoReader(string filepath)

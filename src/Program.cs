@@ -6,28 +6,29 @@ using PgnAnalyzer.IO;
 
 namespace PgnAnalyzer;
 
-//TODO: ADD OPTION FOR LOCATION OF ECO FILE
 class Program
 {
     static void Main(string[] args)
     {
         //arg handling
-        if(args.Length < 3)
-        {
-            Console.WriteLine("\nNot enough arguments. Cannot perform analysis.\n");
-            Console.WriteLine("Run '{dotnet run} help' for more information.");
-            return;
-        }
 
-        if(args.Any(arg => arg.ToLower() == "pgnhelp"))
+        //Extraneous options
+        if(args.Any(arg => arg.ToLower() == "-h" || arg.ToLower() == "--help"))
         {
             showHelpMenu();
             return;
         }
 
-        if(args[0].ToLower() == "boop")
+        if(args[0].ToLower() == "--boop" || args[0].ToLower() == "-b")
         {
             Console.Beep();
+            return;
+        }
+
+        if(args.Length < 3)
+        {
+            Console.WriteLine("\nNot enough arguments. Cannot perform analysis.\n");
+            Console.WriteLine("Run 'analyzer --help' or 'bash analyzer --help' for more information.");
             return;
         }
 
@@ -46,12 +47,11 @@ class Program
         pgnPath = Path.GetFullPath(pgnPath);
 
         //Options
-        string exportPath = Directory.GetCurrentDirectory() + @"\results";
+        string exportPath = Path.GetFullPath("results");
 
-
-        if(args.Contains("--export")|| args.Contains("-e"))
+        if(args.Contains("--export")|| args.Contains("-x"))
         {
-            string flag = args.Contains("--export") ? "--export" : "-e";
+            string flag = args.Contains("--export") ? "--export" : "-x";
             try
             {
                 string input = args[args.ToList().IndexOf(flag)+1];
@@ -65,26 +65,44 @@ class Program
 
         int progressCount = 10000;
 
-        if(args.Contains("--progress")|| args.Contains("-p"))
+        if(args.Contains("--count")|| args.Contains("-c"))
         {
-            string flag = args.Contains("--progress") ? "--progress" : "-p";
+            string flag = args.Contains("--count") ? "--count" : "-c";
             try
             {
                 progressCount = int.Parse(args[args.ToList().IndexOf(flag)+1]); 
             }
             catch(FormatException)
             {
-                Console.WriteLine("WARNING: Progress counter number is not in the proper format. Defaulting to 10000.");
+                Console.WriteLine("WARNING: Counter number is not in the proper format. Defaulting to 10000.");
             }
             catch(OverflowException)
             {
-                Console.WriteLine("WARNING: Progress counter number must be in the range of an integer. Defaulting to 10000.");
+                Console.WriteLine("WARNING: Counter number must be in the range of an integer. Defaulting to 10000.");
             }
             finally
             {
-                Console.WriteLine("WARNING: Progress counter number not found. Defaulting to 10000.");
+                Console.WriteLine("WARNING: Counter number not found. Defaulting to 10000.");
             }
         }
+
+        string pathToEco = Path.GetFullPath("eco.tsv");
+        
+        if(args.Contains("--eco")|| args.Contains("-e"))
+        {
+            string flag = args.Contains("--eco") ? "--eco" : "-e";
+            try
+            {
+                string input = args[args.ToList().IndexOf(flag)+1];
+                pathToEco = Path.GetFullPath(input);
+            }
+            catch
+            {
+                Console.WriteLine("WARNING: File path not found. Using eco.tsv in root directory.");
+            }
+        }
+
+        //Application logic
 
         IAnalyzer analyzerClass;
 
@@ -135,7 +153,7 @@ class Program
         catch(FileNotFoundException)
         {
             Console.WriteLine($"Could not find the PGN file at path {pgnPath} - Aborting analysis.");
-            Console.WriteLine(@"Make sure the file and path exist, and that directories are indicated with / or \\.");
+            Console.WriteLine(@"Make sure the file and path exist. run 'analyzer --help' or 'bash analyzer --help' for more information.");
             return;
         }
 
@@ -156,22 +174,22 @@ class Program
         serializer.Serialize(exportPath, analyzerClass.getResults());
         Console.WriteLine("Analysis successful.");
         Console.WriteLine($"Analyzed a total of {numGames} games.");
-        Console.WriteLine($"Exported at {exportPath}.{format.ToLower()}");
-        
+        Console.WriteLine($"Exported at {exportPath}.{format.ToLower()}");   
     }
 
     private static void showHelpMenu()
     {
         Console.WriteLine("\nExecute PgnAnalyzer.\n");
-        Console.WriteLine("Usage: {dotnet run} <analyzer_class file_format path_to_pgn [options]> | pgnhelp | boop \n");
+        Console.WriteLine("Usage: <[bash (Unix only)] analyzer analyzer_class file_format path_to_pgn [options]> | <[-h|--help]> | <[-b|--boop]> \n");
         Console.WriteLine("Arguments:\n");
-        Console.WriteLine(" analyzer_class    Name of the class to use for analysis.\n");
-        Console.WriteLine(" file_format    Format of the exported file.\n");
+        Console.WriteLine(" analyzer_class    Name of the class to use for analysis. Class must be in the PgnAnalyzer.Analyzer namespace.\n");
+        Console.WriteLine(" file_format    Format of the exported file. Must have a corresponding class in PgnAnalyzer.Serializer with the name '[FILE_TYPE]SerializerWrapper'.\n");
         Console.WriteLine(" path_to_pgn    Path and name of pgn file to analyze\n");
+        Console.WriteLine(" -b, --boop    Make a booping sound and abort. No real purpose, but kinda fun sometimes.\n");
+        Console.WriteLine(" -h, --help    Show command line help.\n");
         Console.WriteLine("Options:\n");
-        Console.WriteLine(" -e, --export <FILE_PATH>    Location and name of the exported file.\n");
-        Console.WriteLine(" -p, --progress <INTEGER>    Indicate analysis progress after this many games\n");
-        Console.WriteLine(" boop    Make a booping sound and abort. No real purpose, but kinda fun sometimes.\n");
-        Console.WriteLine(" pgnhelp    Show command line help.\n");
+        Console.WriteLine(" -x, --export <FILE_PATH>    Location and name of the exported file.\n");
+        Console.WriteLine(" -c, --count <INTEGER>    Indicate analysis progress after this many games.\n");
+        Console.WriteLine(" -e, --eco <FILE-PATH>   Location and name of eco file. Must be a tsv file.\n");
     }
 }

@@ -1,2 +1,2 @@
 @ECHO OFF
-dotnet run --project src/pgnanalyzer.csproj %*
+dotnet run --project src/pgnanalyzer.csproj -- %*
