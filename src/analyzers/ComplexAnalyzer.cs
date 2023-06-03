@@ -74,8 +74,7 @@ public class ComplexAnalyzer : IAnalyzer
 
         //if EcoMoveText = null, something has gone wrong with getEcoFromMoves() or the PGN itself
         List<Move>? ecoMoves = this.eco.getMovesFromEco(eco);
-
-        
+  
         if(ecoMoves == null)
         {
             ecoMoves = new List<Move>();

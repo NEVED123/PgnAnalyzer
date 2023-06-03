@@ -39,11 +39,9 @@ class Program
         {
             analyzer = analyzer.Replace(".cs", String.Empty);
         }
-
-        //TODO: file extension issue
-        //TODO: file path issue
         
         format = format[0].ToString().ToUpper() + format.Substring(1).ToLower(); //capital case
+
         pgnPath = Path.GetFullPath(pgnPath);
 
         //Options
@@ -127,7 +125,18 @@ class Program
             return;
         }
 
-        PgnReader reader = new PgnReader(pgnPath);
+        PgnReader reader;
+
+        try
+        {
+            reader = new PgnReader(pgnPath);
+        }
+        catch(FileNotFoundException)
+        {
+            Console.WriteLine($"Could not find the PGN file at path {pgnPath} - Aborting analysis.");
+            Console.WriteLine(@"Make sure the file and path exist, and that directories are indicated with / or \\.");
+            return;
+        }
 
         Console.WriteLine("Beginning Analysis...");
 
