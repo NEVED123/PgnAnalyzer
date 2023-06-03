@@ -6,6 +6,7 @@ using PgnAnalyzer.IO;
 
 namespace PgnAnalyzer;
 
+//TODO: MOVE ARG HANDLING TO SHELL AND BATCH SCRIPTS
 class Program
 {
     static void Main(string[] args)

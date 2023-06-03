@@ -1,6 +1,6 @@
-namespace test;
-using PgnAnalyzer.Utils;
 using PgnAnalyzer.IO;
+
+namespace PgnAnalyzer.Test;
 
 public class PgnReader_Test
 {

@@ -1,7 +1,6 @@
-namespace test;
-using PgnAnalyzer.Utils;
 using PgnAnalyzer.IO;
 
+namespace PgnAnalyzer.Test;
 public class Eco_Test
 {
     EcoReader? ecoReader;

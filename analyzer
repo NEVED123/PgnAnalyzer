@@ -1,1 +1,5 @@
-dotnet run --project src/pgnanalyzer.csproj -- $@
+if [ "$#" -eq 1 ] && [ "$1" = "test" ]; then
+  dotnet test --filter FullyQualifiedName\~MyTest
+else
+  dotnet run --project src/pgnanalyzer.csproj -- $@
+fi
