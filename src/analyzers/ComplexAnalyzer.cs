@@ -6,6 +6,15 @@ namespace PgnAnalyzer.Analyzer;
 /*
     Example of a more involved analyzer class. If you have not yet, checkout SimpleAnalyzer.cs first.
 
+    Tip from a bigoted OOP lover - when dealing with many different types of data such as this example, it
+    is generally best to distrbute the responsibility for each type among the different classes. For example, once
+    we know what the opening is, we can pass the entire pgn down to that instance of OpeningData, which will perform
+    the necessary analysis and pass it down to its appropriate children. Heck, we could even make all of the data classes
+    implement IAnalyzer to enforce this pattern. This recursive structuring keeps the code clean and easy to maintain. I chose
+    not to do it here for the sake of clarity, so that the analysis happens all in one place.
+
+    Do as you will. Anyway.....
+
     The collected data will look like this:
 
     Opening:
@@ -26,7 +35,7 @@ namespace PgnAnalyzer.Analyzer;
                     Count: #
                 ...
         Rating range: 1000-1500
-            Same as above
+            Number of games, white/black wins, etc... (Same as above)
         Rating range: 1500-2000
             Same as above
         Rating range: 2000+
