@@ -5,7 +5,7 @@ namespace PgnAnalyzer.Analyzer;
 //TODO: ADD CUSTOM TEXT SERIALIZER
 public interface IAnalyzer
 {
-    void addGame(Pgn pgn);
+    void AddGame(Pgn pgn);
 
-    object getResults();
+    object Export();
 }

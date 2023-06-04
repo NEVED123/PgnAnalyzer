@@ -31,7 +31,7 @@ public class SimpleAnalyzer : IAnalyzer //<--Your analysis class must implement 
             Refer to the GitHub page for more examples.
     */
     
-    public void addGame(Pgn pgn)
+    public void AddGame(Pgn pgn)
     {  
         if(!pgn.ContainsKey("WhiteElo") || !pgn.ContainsKey("BlackElo"))
         {
@@ -56,7 +56,7 @@ public class SimpleAnalyzer : IAnalyzer //<--Your analysis class must implement 
         If your analysis requires it to have a constructor with parameters, add a
         private parameterless constructor to it.
     */
-    public object getResults()
+    public object Export()
     {
         result = totalRatingPoints/(numGames * 2);
         return result;

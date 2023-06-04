@@ -49,7 +49,7 @@ public class ComplexAnalyzer : IAnalyzer
     //EcoReader aids in parsing and searching the eco file
     private EcoReader ecoReader = new EcoReader("eco.tsv");
 
-    public void addGame(Pgn pgn)
+    public void AddGame(Pgn pgn)
     {
         //opening info
         Game? game = pgn.game;
@@ -165,7 +165,7 @@ public class ComplexAnalyzer : IAnalyzer
         outOfBookData.count++;  
     }
   
-    public object getResults()
+    public object Export()
     {
         return openings;
     }

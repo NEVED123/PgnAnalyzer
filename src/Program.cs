@@ -151,7 +151,7 @@ class Program
 
         while(reader.MoveNext())
         {
-            analyzerClass.addGame(reader.Current);
+            analyzerClass.AddGame(reader.Current);
             numGames++;
             if(numGames % progressCount == 0)
             {
@@ -159,7 +159,7 @@ class Program
             }
         }
 
-        serializer.Serialize(exportPath, analyzerClass.getResults());
+        serializer.Serialize(exportPath, analyzerClass.Export());
         Console.WriteLine("Analysis successful.");
         Console.WriteLine($"Analyzed a total of {numGames} games.");
         Console.WriteLine($"Exported at {exportPath}.{format.ToLower()}");   

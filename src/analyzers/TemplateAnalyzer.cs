@@ -6,7 +6,7 @@ namespace PgnAnalyzer.Analyzer;
 
 public class TemplateAnalyzer : IAnalyzer //<--Your analysis class must implement the IAnalyzer interface.
 {
-    public void addGame(Pgn pgn)
+    public void AddGame(Pgn pgn)
     {   
         /*
             Logic to perform for each new game. 
@@ -15,7 +15,7 @@ public class TemplateAnalyzer : IAnalyzer //<--Your analysis class must implemen
         */
     }
 
-    public object getResults()
+    public object Export()
     {
         /*
             Performed when all games have been iterated through and analyzed.
