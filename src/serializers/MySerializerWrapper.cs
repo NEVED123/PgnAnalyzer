@@ -1,9 +1,17 @@
-namespace PgnAnalyzer.Serializer;
+namespace PgnAnalyzer.Serializer; //<-- The custom serializer must belong to the Serializer namespace.
 
-public class MySerializerWrapper : ISerializerWrapper
+/*
+    Template for creating a custom serializer.
+    The serializer must have the name [Fileformat]SerializerWrapper, with file type capitalized.
+        ex. txt -> TxtSerializerWrapper
+            xml -> XmlSerializerWrapper
+*/
+
+public class MySerializerWrapper : ISerializerWrapper //<-- Serializer must implement the ISerializerWrapper interface.
 {
     public void Serialize(string filename, object obj)
     {
-        //Your serializer logic
+        //Your complete serializer logic, from reflection to creating the file.
+        //See the other serializers for more examples.
     }
 }

@@ -5,7 +5,8 @@ namespace PgnAnalyzer.Analyzer;
 
 /*
     Example of a more involved analyzer class. If you have not yet, checkout SimpleAnalyzer.cs first.
-    The data will look like this:
+
+    The collected data will look like this:
 
     Opening:
         ECO:
@@ -114,7 +115,7 @@ public class ComplexAnalyzer : IAnalyzer
 
         List<OutOfBookData> currOutOfBookDataList = ratingData.outOfBookDataList;
 
-        //get First Ply out of book
+        //get First Ply out of book - We must figure out if it was whites move or blacks move.
 
         int gameLength = game.moves.Count;
         int ecoLength = eco.moves!.Count;

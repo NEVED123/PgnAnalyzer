@@ -1,11 +1,13 @@
 using PgnAnalyzer.Utils;
 
-namespace PgnAnalyzer.Analyzer; //<---Any analysis you write must be in the Analyzer namespace
+namespace PgnAnalyzer.Analyzer; //<---Any analysis you write must be in the Analyzer namespace.
 
 /*  
     Example of a simple analyzer class which gets the average rating of all games in a pgn.
+    Analyzers have no class name requirements.
 */
-public class SimpleAnalyzer : IAnalyzer
+
+public class SimpleAnalyzer : IAnalyzer //<--Your analysis class must implement the IAnalyzer interface.
 {
     //Keep any data types / variables necessary for your analysis.
     private int totalRatingPoints;
@@ -16,9 +18,23 @@ public class SimpleAnalyzer : IAnalyzer
         Logic to perform for each new game. 
         Think of this block of code as the body 
         of a for loop that iterates over all games in the pgn file.
+
+        The PGN object stores all tags as key value pairs, which can be accessed like a dictionary.
+        The game itself can be accessed as follows:
+
+            Game? game = pgn.game (Note that the game can be null if there is no game associated with a set of tags)
+
+            //Get the moves in a game
+            List<Move> moves = game.moves;
+
+            //Get the result of a game
+            string? result = game.result ("1-0, 0-1, 1/2-1/2, null")
+
+            Refer to the GitHub page for more examples.
     */
+    
     public void addGame(Pgn pgn)
-    {   
+    {  
         if(!pgn.ContainsKey("WhiteElo") || !pgn.ContainsKey("BlackElo"))
         {
             return;
