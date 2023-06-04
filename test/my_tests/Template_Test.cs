@@ -2,7 +2,7 @@ namespace PgnAnalyzer.MyTest; //<---Any test you write must be in the MyTest nam
 
 //This framework uses NUnit for testing. See https://github.com/nunit/nunit-csharp-samples
 
-public class MyAnalyzer_Test
+public class Template_Test
 {
     [SetUp]
     public void SetUp()

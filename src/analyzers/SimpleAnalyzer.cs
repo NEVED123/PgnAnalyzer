@@ -1,5 +1,3 @@
-using PgnAnalyzer.Utils;
-
 namespace PgnAnalyzer.Analyzer; //<---Any analysis you write must be in the Analyzer namespace.
 
 /*  

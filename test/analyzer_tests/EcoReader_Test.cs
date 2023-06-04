@@ -1,5 +1,3 @@
-using PgnAnalyzer.IO;
-
 namespace PgnAnalyzer.Test;
 public class Eco_Test
 {

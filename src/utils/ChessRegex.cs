@@ -1,5 +1,3 @@
-using System.Text.RegularExpressions;
-
 namespace PgnAnalyzer.Utils;
 
 //A bank of regular expressions for recogizing chess moves

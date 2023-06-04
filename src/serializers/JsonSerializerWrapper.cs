@@ -1,6 +1,4 @@
-using System.Text.Json.Serialization;
 using System.Text.Json;
-using PgnAnalyzer.IO;
 
 namespace PgnAnalyzer.Serializer;
 

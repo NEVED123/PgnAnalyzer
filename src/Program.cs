@@ -1,10 +1,4 @@
-﻿using System.IO;
-using System.Reflection;
-using PgnAnalyzer.Analyzer;
-using PgnAnalyzer.Serializer;
-using PgnAnalyzer.IO;
-
-namespace PgnAnalyzer;
+﻿namespace PgnAnalyzer;
 
 //TODO: ADD README
 //TODO: Move folders for easier use by user

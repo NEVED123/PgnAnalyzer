@@ -1,6 +1,3 @@
-using PgnAnalyzer.Utils;
-using PgnAnalyzer.IO;
-
 namespace PgnAnalyzer.Analyzer;
 
 /*

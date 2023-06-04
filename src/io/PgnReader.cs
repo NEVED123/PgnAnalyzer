@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Text.RegularExpressions;
-using System.Diagnostics;
-using PgnAnalyzer.Utils;
 
 namespace PgnAnalyzer.IO;
 

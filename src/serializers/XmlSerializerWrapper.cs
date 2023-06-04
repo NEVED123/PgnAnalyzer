@@ -1,4 +1,3 @@
-using PgnAnalyzer.IO;
 using System.Xml.Serialization;
 
 namespace PgnAnalyzer.Serializer;

@@ -1,12 +1,10 @@
-using PgnAnalyzer.Utils;
-
 namespace PgnAnalyzer.Analyzer; 
 
 /*  
     Template for a custom analyzer class. See examples for more information.
 */
 
-public class MyAnalyzer : IAnalyzer //<--Your analysis class must implement the IAnalyzer interface.
+public class TemplateAnalyzer : IAnalyzer //<--Your analysis class must implement the IAnalyzer interface.
 {
     public void addGame(Pgn pgn)
     {   

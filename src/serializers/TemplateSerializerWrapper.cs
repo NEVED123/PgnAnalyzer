@@ -7,7 +7,7 @@ namespace PgnAnalyzer.Serializer; //<-- The custom serializer must belong to the
             xml -> XmlSerializerWrapper
 */
 
-public class MySerializerWrapper : ISerializerWrapper //<-- Serializer must implement the ISerializerWrapper interface.
+public class TemplateSerializerWrapper : ISerializerWrapper //<-- Serializer must implement the ISerializerWrapper interface.
 {
     public void Serialize(string filename, object obj)
     {

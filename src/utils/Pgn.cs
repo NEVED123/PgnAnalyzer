@@ -1,5 +1,3 @@
-using System.Globalization;
-
 namespace PgnAnalyzer.Utils;
 
 public class Pgn : Dictionary<String, Object>
