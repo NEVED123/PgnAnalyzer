@@ -1,38 +1,118 @@
 # PgnAnalyzer
-.NET Console Application that Gathers useful data about openings from a large set of chess PGNs, and writes it to a text file.
+PgnAnalyzer parses your PGN into a set of utility classes and provides environment to easily gather data about a large set of games. This data can then be easily exported to a file type of your choice.
 
-NOTE - This is still under development. There will be more flexibility for analysis and export options in the future, as well as more usage options.
+NOTE - This is still under development. Bug fixes and more features are on the way!
 
 ## Installation
 
-If you are not using Windows, you will need to have the .NET Framework installed on your machine. Search how to do this on your operating system - Microsoft hates you if you don't use Windows so good luck.
+### Prerequisites
+* [Git](https://git-scm.com/downloads)
+* [.NET Framework](https://dotnet.microsoft.com/en-us/download) (Comes with Windows)
+* Any text editor will work, however this framework works best with [VSCode](https://code.visualstudio.com/download).
 
-### With Git
-1. If you do not have git installed, do so [here](https://git-scm.com/downloads)
-2. Open the command line and change the directory to where you want to install.
-3. Run ``git clone https://github.com/NEVED123/PgnAnalyzer.git``
-
-### Without Git
-1. Click on Code -> Download ZIP and extract wherever you like
-2. Open the command line in the project directory
+1. Open the command line and change the directory to where you want to install.
+2. Run ``git clone https://github.com/NEVED123/PgnAnalyzer.git`` followed by ``cd PgnAnalyzer``
+3. Open this directory in your text editor of choice. (If you are using VSCode, you may get a popup asking if you want to install missing dependencies - Do this)
 
 ## Usage
-1. To tell the .NET framework that you want to run the main script, you must run ``cd src`` so that the project file is in scope. 
-2. Run ``dotnet run path/to/pgn.pgn [path/to/export] [exportedFileName]``
 
-   * ``[path/to/pgn.pgn]`` : Required - Path to the PGN file. Note that the pgn must be formated such that there is a space between the tags and games, and that there is a space between each game. An example of a proper PGN format is shown below. 
-   * ``[path/to/export]`` : Optional - Path of exported file. If not specified, the file will be exported in the working directory.
-   * ``[exportedFileName]`` : Optional - Name of exported file. If not specified, file will be named ``results.txt``. If you specify this, you must also specify the export path.
+### Creating your own analyzer
 
-You can get PGN's from your own games through lichess and chess.com. If you want to use large PGN samples, refer to the lichess [game database](https://database.lichess.org/)
+To create your own analyzer class, go to ``src/analyzers`` and create a new C# file. It can be called anything, so long as it has file extension ``.cs``. Use this template to start your analyzer:
 
-## Example
+#### TemplateAnalyzer.cs
+```C#
+namespace PgnAnalyzer.Analyzer; 
 
-Run ``dotnet run ../games.pgn C:\Users\neved\OneDrive\Desktop analysis``
+/*  
+    Template for a custom analyzer class. See examples for more information.
+*/
 
-Games.pgn (Note that we can accept games with or without analysis):
+public class TemplateAnalyzer : IAnalyzer //<--Your analysis class must implement the IAnalyzer interface.
+{
+    public void AddGame(Pgn pgn)
+    {   
+        /*
+            Logic to perform for each new game. 
+            Think of this block of code as the body 
+            of a for loop that iterates over all games in the pgn file.
+        */
+    }
+
+    public object Export()
+    {
+        /*
+            Performed when all games have been iterated through and analyzed.
+            Return any object which represents your complete analysis.
+            The only requirement for the object is that it must have a parameterless constructor.
+            If your analysis requires it to have a constructor with parameters, add a
+            private parameterless constructor to it.
+        */
+        return new object(); //<--Can be an instance of any class, this is just a placeholder
+    }
+}
+
+```
+Implementation details, examples, and this template to make your own analyzer can be found in the ``src/analyzers`` folder.
+
+### (Optional) Creating your own serializer / Configuring existing serializers
+
+The serializer is what converts the exported object into a file. To make your own, create a file under ``src/serializers``. Create a class with the name FiletypeSerializerWrapper (Ex. xml -> XmlSerializerWrapper). Be sure the name of the class has no typos, and that the first letter in the filetype is capitalized. Use this template to get started:
+
+#### TemplateSerializerWrapper.cs
+```C#
+namespace PgnAnalyzer.Serializer; //<-- The custom serializer must belong to the Serializer namespace.
+
+/*
+    Template for creating a custom serializer.
+    The serializer must have the name [Fileformat]SerializerWrapper, with file type capitalized.
+        ex. txt -> TxtSerializerWrapper
+            xml -> XmlSerializerWrapper
+*/
+
+public class TemplateSerializerWrapper : ISerializerWrapper //<-- Serializer must implement the ISerializerWrapper interface.
+{
+    public void Serialize(string filename, object obj)
+    {
+        //Your complete serializer logic, from reflection to creating the file.
+        //See the other serializers for more examples.
+    }
+}
 ```
 
+Serializers for XML and JSON have been provided, along with this template to make your own. 
+
+
+
+### Executing Analysis
+
+Once you have created an analysis class, you are ready to analyze! The command to activate the framework is ``analyzer``. If you are using a UNIX based system, you will need to use ``bash analyzer``, or do additional configuring.
+
+#### Synopsis
+```
+<analyzer analyzer_class file_format path_to_pgn [options]> | <[-h|--help]> | <[-b|--boop]>
+```
+#### Arguments
+| Argument     | Description |
+| ----------- | ----------- |
+| ``analyzer_class`` | Name of the class to use for analysis. Class must be in the PgnAnalyzer.Analyzer namespace. Argument does not need to include the .cs file extension. |
+| ``file_format`` | Format of the file to export to. If using a custom serializer, be sure the class is in the PgnAnalyzer.Serializer namespace, and that the class name of the correct format.|
+| ``path_to_pgn`` | Path and name of pgn file to analyze.|
+| ``-b,--boop`` | Make a booping sound and abort. No real purpose, but kinda fun sometimes.|
+| ``-h,--help`` | Show command line help.|
+
+#### Options
+| Option | Description |
+| ----------- | ----------- |
+| ``-x, --export <FILE_PATH>`` | Location and name of the exported file.|
+| ``-c, --count <INTEGER>`` | Indicate analysis progress after this many games. |
+
+#### Example
+
+Here is an example of a properly formatted PGN file containing 12 games which has been provided:
+
+#### samplegames.pgn
+```
 [Event "Rated Classical game"]
 [Site "https://lichess.org/0ebuwdjy"]
 [White "dopi"]
@@ -67,52 +147,82 @@ Games.pgn (Note that we can accept games with or without analysis):
 [TimeControl "480+0"]
 [Termination "Normal"]
 
-1. e4 e5 2. Bc4 d5 3. Bb5+ c6 4. Bd3 d4 5. Nf3 f6 6. Bc4 Bg4 7. h3 Bh5 8. g4 Bg6 9. d3 Bb4+ 10. c3 dxc3 11. bxc3 Bc5 12. Qa4 Qb6 13. Nbd2 Bxf2+ 14. Kd1 Nd7 15. Be6 Nc5 16. Qc4 Ke7 17. g5 Nxe6 18. gxf6+ gxf6 19. Ba3+ Kd7 20. Rf1 Ne7 21. Rxf2 Qxf2 22. Rb1 Rab8 23. d4 Bh5 24. dxe5 Bxf3+ 25. Kc2 fxe5 26. Qb4 Rhe8 27. Qxb7+ Rxb7 28. Rxb7+ Nc7 29. Rxc7+ Kxc7 30. Bxe7 Rxe7 31. Kb3 Qxd2 32. Kc4 Kd6 33. Kb4 Rb7+ 34. Ka5 Qxc3+ 35. Ka6 Qb4 36. h4 Be2# 0-1
- ```
+1. e4 e5 2. Bc4 d5 3. Bb5+ c6 4. Bd3 d4 5. Nf3 f6 6. Bc4 Bg4 7. h3 Bh5 8. g4 Bg6 9. d3 Bb4+ 10. c3 dxc3 11. bxc3 Bc5 12. Qa4 Qb6 13. Nbd2 Bxf2+ 14. Kd1 Nd7 15. Be6 Nc5 16. Qc4 Ke7 17. g5 Nxe6 18. gxf6+ gxf6 19. Ba3+ Kd7 20. Rf1 Ne7 21. Rxf2 Qxf2 22. Rb1 Rab8 23. d4 Bh5 24. dxe5 Bxf3+ 25. Kc2 fxe5 26. Qb4 Rhe8 1-0
 
-## Output
-
-analysis.txt (Better organization of data coming soon)
+(10 more games)
 ```
----RESULTS---
-ECO: B00
- Number of Games: 1
-Rating Pools
- Elo: >1500
- White wins: 1
- Black wins: 0
- Draws: 0
-Out Of Book Moves:
- Move: d5
- moveNum: 1
- count: 1
-Blunders:   
- Move Number: 8
- Count: 1
+You can get PGN's from your own games through lichess and chess.com. If you want to use large PGN samples, refer to the lichess [game database](https://database.lichess.org/).
 
+To analyze this data and have the results exported to your desktop, run:
 
-ECO: C23
- Number of Games: 1
-Rating Pools
- Elo: >1000
- White wins: 0
- Black wins: 0
- Draws: 0
-Out Of Book Moves:
- Move: d5
- moveNum: 2
- count: 1
-Blunders: No Data
-
+Windows
+```
+analyzer ComplexAnalyzer json samplegames.pgn --export \path\to\your\desktop\filename
+```
+Unix
+```
+bash analyzer ComplexAnalyzer json samplegames.pgn --export /path/to/your/desktop/filename
 ```
 
+#### Result 
+The \u0027s is caused by the apostrophe in the name of the opening, "Bishop's Opening"
+```json
+[
+  {
+    "ecoCode": "B01",
+    "ecoName": "Scandinavian",
+    "ecoMoves": "e4 d5",
+    "numGames": 1,
+    "ratingDataList": [
+      {
+        "outOfBookDataList": [
+          {
+            "san": "exd5",
+            "count": 1
+          }
+        ],
+        "eloMin": 1500,
+        "whiteWinNum": 1,
+        "blackWinNum": 0,
+        "drawNum": 0,
+        "noResultDataNum": 0
+      }
+    ]
+  },
+  {
+    "ecoCode": "C23",
+    "ecoName": "Bishop\u0027s Opening",
+    "ecoMoves": "e4 e5 Bc4",
+    "numGames": 1,
+    "ratingDataList": [
+      {
+        "outOfBookDataList": [
+          {
+            "san": "d5",
+            "count": 1
+          }
+        ],
+        "eloMin": 1000,
+        "whiteWinNum": 1,
+        "blackWinNum": 0,
+        "drawNum": 0,
+        "noResultDataNum": 0
+      }
+    ]
+  },
+  ...201 more lines
+]
+```
 
+### Additional Configurations
 
+An extensive eco file has been [provided](https://lichess.org/forum/general-chess-discussion/eco-code-csv-sheet) (``eco.tsv``), which is used to resolve ECO information. However, if you wish to use your own eco file, you must:
+1. Keep it in the same location as the current eco fie.
+2. Name it eco.tsv.
+3. Ensure that it has the format ``ECO Code | Name | Opening Moves``.
 
+Currently, these values are hardcoded.
 
+## Documentation
 
-
-
-
-
-
+Coming Soon!!
