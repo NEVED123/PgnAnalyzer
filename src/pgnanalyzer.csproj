@@ -7,4 +7,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+<ItemGroup>
+    <Compile Include="..\analyzers\**\*.cs" Link="%(RecursiveDir)%(Filename)%(Extension)"/>
+    <Compile Include="..\serializers\**\*.cs" Link="%(RecursiveDir)%(Filename)%(Extension)"/>
+</ItemGroup>
+
 </Project>

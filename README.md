@@ -18,9 +18,9 @@ NOTE - This is still under development. Bug fixes and more features are on the w
 
 ### Creating your own analyzer
 
-To create your own analyzer class, go to ``src/analyzers`` and create a new C# file. It can be called anything, so long as it has file extension ``.cs``. Use this template to start your analyzer:
+To create your own analyzer class, go to the ``analyzers`` folder and create a new C# file. It can be called anything, so long as it has file extension ``.cs``. Use this template to start your analyzer:
 
-#### TemplateAnalyzer.cs
+#### analyzers/TemplateAnalyzer.cs
 ```C#
 namespace PgnAnalyzer.Analyzer; 
 
@@ -53,13 +53,13 @@ public class TemplateAnalyzer : IAnalyzer //<--Your analysis class must implemen
 }
 
 ```
-Implementation details, examples, and this template to make your own analyzer can be found in the ``src/analyzers`` folder.
+Implementation details, examples, and this template to make your own analyzer can be found in the ``analyzers`` folder.
 
 ### (Optional) Creating your own serializer / Configuring existing serializers
 
-The serializer is what converts the exported object into a file. To make your own, create a file under ``src/serializers``. Create a class with the name FiletypeSerializerWrapper (Ex. xml -> XmlSerializerWrapper). Be sure the name of the class has no typos, and that the first letter in the filetype is capitalized. Use this template to get started:
+The serializer is what converts the exported object into a file. To make your own, create a file under ``serializers``. Create a class with the name FiletypeSerializerWrapper (Ex. xml -> XmlSerializerWrapper). Be sure the name of the class has no typos, and that the first letter in the filetype is capitalized. Use this template to get started:
 
-#### TemplateSerializerWrapper.cs
+#### serializers/TemplateSerializerWrapper.cs
 ```C#
 namespace PgnAnalyzer.Serializer; //<-- The custom serializer must belong to the Serializer namespace.
 
@@ -86,7 +86,7 @@ Serializers for XML and JSON have been provided, along with this template to mak
 
 ### Executing Analysis
 
-Once you have created an analysis class, you are ready to analyze! The command to activate the framework is ``analyzer``. If you are using a UNIX based system, you will need to use ``bash analyzer``, or do additional configuring.
+Once you have created an analysis class, you are ready to analyze! The command to activate the framework is ``analyzer``. If you are using a Unix based system, you will need to use ``bash analyzer``, or do additional configuring.
 
 #### Synopsis
 ```
@@ -216,12 +216,7 @@ The \u0027s is caused by the apostrophe in the name of the opening, "Bishop's Op
 
 ### Additional Configurations
 
-An extensive eco file has been [provided](https://lichess.org/forum/general-chess-discussion/eco-code-csv-sheet) (``eco.tsv``), which is used to resolve ECO information. However, if you wish to use your own eco file, you must:
-1. Keep it in the same location as the current eco fie.
-2. Name it eco.tsv.
-3. Ensure that it has the format ``ECO Code | Name | Opening Moves``.
-
-Currently, these values are hardcoded.
+An extensive eco file has been [provided](https://lichess.org/forum/general-chess-discussion/eco-code-csv-sheet) (``eco.tsv``), which is used to resolve ECO information. However, if you wish to use your own eco file, you must ensure that it is of the same format as the example provided. 
 
 ## Documentation
 
