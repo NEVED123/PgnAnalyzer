@@ -172,7 +172,7 @@ class Program
         Console.WriteLine("Arguments:\n");
         Console.WriteLine(" analyzer_class    Name of the class to use for analysis. Class must be in the PgnAnalyzer.Analyzer namespace.\n");
         Console.WriteLine(" file_format    Format of the exported file. Must have a corresponding class in PgnAnalyzer.Serializer with the name '[FILE_TYPE]SerializerWrapper'.\n");
-        Console.WriteLine(" path_to_pgn    Path and name of pgn file to analyze\n");
+        Console.WriteLine(" path_to_pgn    Path and name of pgn file to analyze.\n");
         Console.WriteLine(" -b, --boop    Make a booping sound and abort. No real purpose, but kinda fun sometimes.\n");
         Console.WriteLine(" -h, --help    Show command line help.\n");
         Console.WriteLine("Options:\n");
