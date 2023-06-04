@@ -26,6 +26,6 @@ public class MyAnalyzer : IAnalyzer //<--Your analysis class must implement the 
             If your analysis requires it to have a constructor with parameters, add a
             private parameterless constructor to it.
         */
-        throw new NotImplementedException(); //<--Get rid of this when using, this just appeases the compiler ;)
+        return new object(); //<--Can be an instance of any class, this is just a placeholder
     }
 }

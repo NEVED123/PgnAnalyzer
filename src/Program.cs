@@ -7,6 +7,8 @@ using PgnAnalyzer.IO;
 namespace PgnAnalyzer;
 
 //TODO: ADD README
+//TODO: Move folders for easier use by user
+//TODO: add checks for OS to modify command line help
 class Program
 {
     static void Main(string[] args)
@@ -30,6 +32,13 @@ class Program
         if(args[0].ToLower() == "--boop" || args[0].ToLower() == "-b")
         {
             Console.Beep();
+            return;
+        }
+
+        if(args.Length == 1)
+        {
+            Console.WriteLine("\nNot enough arguments. Cannot perform analysis.\n");
+            Console.WriteLine("Run 'analyzer --help' or 'bash analyzer --help' for more information.");
             return;
         }
 
@@ -81,7 +90,7 @@ class Program
             {
                 Console.WriteLine("WARNING: Counter number must be in the range of an integer. Defaulting to 10000.");
             }
-            finally
+            catch
             {
                 Console.WriteLine("WARNING: Counter number not found. Defaulting to 10000.");
             }
