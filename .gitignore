@@ -476,11 +476,12 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-*.pgn
+# for testing purposes
+*.pgn 
+
 !test.pgn
 !samplegames.pgn
 
-results.xml
-results.txt
-results.json
+*.xml
+*.json
 
