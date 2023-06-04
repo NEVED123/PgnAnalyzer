@@ -54,7 +54,7 @@ public class ComplexAnalyzer : IAnalyzer
         }
 
         //Util for Eco. 
-        Eco? eco;
+        Eco eco;
 
         if(pgn.ContainsKey("eco"))
         {
@@ -66,13 +66,15 @@ public class ComplexAnalyzer : IAnalyzer
         }
 
         //get appropiate openingData class if it exists
-        OpeningData? opening = openings.Find(opening => opening.eco.Equals(eco));
+        OpeningData? opening = openings.Find(opening => opening.ecoCode == eco.code);
 
         if(opening == null)
         {
             //We have not seen this opening yet, so add a new one to the list
             opening = new OpeningData();
-            opening.eco = eco;
+            opening.ecoCode = eco.code!;
+            opening.ecoName = eco.name!;
+            opening.ecoMoves = Move.ListToString(eco.moves!);
             openings.Add(opening);
         }
 

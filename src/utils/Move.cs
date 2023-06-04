@@ -124,16 +124,15 @@ public class Move{
         return new Move(whitePly, blackPly, moveNum);
     }
 
-    public static List<Ply?> ToPlyList(List<Move> moves)
+    public static string ListToString(List<Move> moves)
     {
-        List<Ply?> result = new List<Ply?>();
+        string result = "";
 
         foreach(Move move in moves)
         {
-            result.Add(move.whitePly);
-            result.Add(move.blackPly);
+            result += $"{move} ";
         }
 
-        return result;
+        return result.Trim(' ');
     }
 }

@@ -5,32 +5,27 @@ namespace PgnAnalyzer.Analyzer;
 /*
     Data class used in ComplexAnalyzer.cs. 
     Aggregates similar Data classes - see those for more examples.
+
+    Note that all values are initialized, so we have a parameterless constructor
+    by default that will appease the serializers.
 */
 
 public class OpeningData
 {
-    public Eco eco {get;set;} = new Eco();
+    public string ecoCode {get;set;} = "A00";
+    public string ecoName {get;set;} = "Unknown";
+    public string ecoMoves {get;set;} = "";
     public int numGames {get; set;} = 0;
     public List<RatingData> ratingDataList {get; set;} = new List<RatingData>();
 
     //ToString method is not required
     public override string ToString()
     {
-        string ecoMoves = "";
-
-        if(eco.moves != null)
-        {
-            foreach(Move move in eco.moves)
-            {
-                ecoMoves += $"{move} ";
-            } 
-        }
-
         ecoMoves = ecoMoves.Trim(' ');
 
         string output = "";
 
-        output += $"ECO: {eco.code} - {eco.name}\n";
+        output += $"ECO: {ecoCode} - {ecoName}\n";
         output += $"Moves: {ecoMoves}";
 
         output += $" Number of Games: {numGames}\n";

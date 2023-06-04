@@ -91,4 +91,22 @@ public class Ply{
         
         return output.Trim(' '); //Trims space in the case of only having an annotation
     }
+
+    public static List<Ply?> ToPlyList(List<Move> moves)
+    {
+        List<Ply?> result = new List<Ply?>();
+
+        foreach(Move move in moves)
+        {
+            result.Add(move.whitePly);
+            result.Add(move.blackPly);
+        }
+
+        return result;
+    }
+
+    public static List<Ply?> ToPlyList(Game game)
+    {
+        return ToPlyList(game.moves);
+    }
 }   
