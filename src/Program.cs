@@ -13,6 +13,13 @@ class Program
     {
         //arg handling
 
+        if(args.Length == 0 || args.Length == 2)
+        {
+            Console.WriteLine("\nNot enough arguments. Cannot perform analysis.\n");
+            Console.WriteLine("Run 'analyzer --help' or 'bash analyzer --help' for more information.");
+            return;
+        }
+
         //Extraneous options
         if(args.Any(arg => arg.ToLower() == "-h" || arg.ToLower() == "--help"))
         {
@@ -23,13 +30,6 @@ class Program
         if(args[0].ToLower() == "--boop" || args[0].ToLower() == "-b")
         {
             Console.Beep();
-            return;
-        }
-
-        if(args.Length < 3)
-        {
-            Console.WriteLine("\nNot enough arguments. Cannot perform analysis.\n");
-            Console.WriteLine("Run 'analyzer --help' or 'bash analyzer --help' for more information.");
             return;
         }
 
