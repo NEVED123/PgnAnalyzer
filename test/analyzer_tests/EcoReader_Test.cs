@@ -6,7 +6,7 @@ public class Eco_Test
     [SetUp]
     public void Setup()
     {
-        ecoReader = new EcoReader("eco.tsv");
+        ecoReader = new EcoReader("testeco.tsv");
     }
 
     [Test]
