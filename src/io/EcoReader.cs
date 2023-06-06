@@ -1,6 +1,5 @@
 namespace PgnAnalyzer.IO;
-//TODO: Add validation that file is a proper eco file. (correct number of columns, moves can be parsed, etc.)
-//TODO: Add a static list of ECOs that gets filled with imported ECO list upon being initialized.
+
 public class EcoReader
 {
     public EcoReader(string filepath)

@@ -1,7 +1,5 @@
 namespace PgnAnalyzer.Test;
 
-//TODO: ADD SEPERATE TESTING FOLDER FOR USER WITH BASH SCRIPT THAT ONLY RUNS THOSE  
-
 public class Utils_Test
 {
     [Test]

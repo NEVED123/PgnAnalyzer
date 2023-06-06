@@ -1,8 +1,5 @@
 ﻿namespace PgnAnalyzer;
 
-//TODO: ADD README
-//TODO: Move folders for easier use by user
-//TODO: add checks for OS to modify command line help
 class Program
 {
     static void Main(string[] args)

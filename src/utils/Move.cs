@@ -2,8 +2,6 @@ using System.Text.RegularExpressions;
 
 namespace PgnAnalyzer.Utils;
 
-//TODO: REPLACE ALL INSTANCES OF LIST WITH IENUMERABLE WHERE APPLICABLE
-
 public class Move{
 
     public Ply? whitePly {get; set;}

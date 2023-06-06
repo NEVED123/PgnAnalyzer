@@ -2,10 +2,6 @@ using System.Text.RegularExpressions;
 
 namespace PgnAnalyzer.Utils;
 
-//TODO: Implement IEquatable or IEqualityComparer
-//TODO: Add check for result values to be reasonable, throw warning if not
-//TODO: create new exception family for parsing strings
-//TODO: Add options for ToString method
 public class Game
 {
     public Game(string gameString)
