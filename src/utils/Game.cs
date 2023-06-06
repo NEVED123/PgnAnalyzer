@@ -3,11 +3,14 @@ using System.Text.RegularExpressions;
 namespace PgnAnalyzer.Utils;
 
 //TODO: Implement IEquatable or IEqualityComparer
+//TODO: Add check for result values to be reasonable, throw warning if not
+//TODO: create new exception family for parsing strings
+//TODO: Add options for ToString method
 public class Game
 {
-    public Game(string moveText)
+    public Game(string gameString)
     {
-        var game = Parse(moveText);
+        var game = Parse(gameString);
 
         this.moves = game.moves;
         this.result = game.result;
@@ -26,7 +29,7 @@ public class Game
     public Game(){}
 
     public string? result {get; set;}
-    public List<Move> moves {get;} = new List<Move>();
+    public List<Move> moves {get;set;} = new List<Move>();
 
     public override string ToString()
     {
@@ -109,4 +112,24 @@ public class Game
 
        return new Game(moveList, gameResult);
     }
+
+    public bool HasAnalysis()
+    {
+        if(moves != null)
+        {
+            return moves.Any(move => move.HasAnalysis());
+        }
+
+        return false;
+    }
+
+    public bool HasAnnotations()
+    {
+        if(moves != null)
+        {
+            return moves.Any(move => move.hasAnnotations());
+        }
+
+        return false;
+    }    
 }

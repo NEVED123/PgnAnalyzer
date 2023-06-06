@@ -2,7 +2,7 @@ using System.Text.RegularExpressions;
 
 namespace PgnAnalyzer.Utils;
 
-//TODO: ADD STATIC METHOD TO CONVERT LIST OF MOVES TO STRING
+//TODO: REPLACE ALL INSTANCES OF LIST WITH IENUMERABLE WHERE APPLICABLE
 
 public class Move{
 
@@ -124,7 +124,7 @@ public class Move{
         return new Move(whitePly, blackPly, moveNum);
     }
 
-    public static string ListToString(List<Move> moves)
+    public static string ListToString(IEnumerable<Move> moves)
     {
         string result = "";
 
@@ -134,5 +134,25 @@ public class Move{
         }
 
         return result.Trim(' ');
+    }
+
+    public bool HasAnalysis()
+    {
+        if(blackPly != null && whitePly != null)
+        {
+            return blackPly.HasAnalysis() && whitePly.HasAnalysis();
+        }
+
+        return false;
+    }
+
+    public bool hasAnnotations()
+    {
+        if(blackPly != null && whitePly != null)
+        {
+            return blackPly.HasAnnotations() && whitePly.HasAnnotations();
+        }
+
+        return false;
     }
 }

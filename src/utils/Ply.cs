@@ -92,7 +92,7 @@ public class Ply{
         return output.Trim(' '); //Trims space in the case of only having an annotation
     }
 
-    public static List<Ply?> ToPlyList(List<Move> moves)
+    public static List<Ply?> ToPlyList(IEnumerable<Move> moves)
     {
         List<Ply?> result = new List<Ply?>();
 
@@ -108,5 +108,15 @@ public class Ply{
     public static List<Ply?> ToPlyList(Game game)
     {
         return ToPlyList(game.moves);
+    }
+
+    public bool HasAnalysis()
+    {
+        return this.analysis != null;
+    }
+
+    public bool HasAnnotations()
+    {
+        return this.annotation != null;
     }
 }   

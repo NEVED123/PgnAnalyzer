@@ -1,7 +1,9 @@
 # PgnAnalyzer
-PgnAnalyzer parses your PGN into a set of utility classes and provides environment to easily gather data about a large set of games. This data can then be easily exported to a file type of your choice.
+PgnAnalyzer parses your [PGN](https://en.wikipedia.org/wiki/Portable_Game_Notation) file into a set of utility classes and provides environment to easily gather data about a large set of games. This data can then be easily exported to a file type of your choice.
 
-NOTE - This is still under development. Bug fixes and more features are on the way!
+NOTE - This is not a chess engine, nor is there built in functionality for checking the validity of moves, etc. It is a tool to analyze existing chess PGNs.
+
+PgnAnalyzer is still under development. Bug fixes and more features are on the way!
 
 ## Installation
 
@@ -18,7 +20,7 @@ NOTE - This is still under development. Bug fixes and more features are on the w
 
 ### Creating your own analyzer
 
-To create your own analyzer class, go to the ``analyzers`` folder and create a new C# file. It can be called anything, so long as it has file extension ``.cs``. Use this template to start your analyzer:
+To perform your own, custom analysis, you must create an analyzer class. To do this, go to the ``analyzers`` folder and create a new C# file. It can be called anything, so long as it has file extension ``.cs``. Use this template to start your analyzer:
 
 #### analyzers/TemplateAnalyzer.cs
 ```C#
@@ -45,7 +47,7 @@ public class TemplateAnalyzer : IAnalyzer //<--Your analysis class must implemen
             Performed when all games have been iterated through and analyzed.
             Return any object which represents your complete analysis.
             The only requirement for the object is that it must have a parameterless constructor.
-            If your analysis requires it to have a constructor with parameters, add a
+            If your analysis requires it to have a public constructor with parameters, add a
             private parameterless constructor to it.
         */
         return new object(); //<--Can be an instance of any class, this is just a placeholder
@@ -82,15 +84,13 @@ public class TemplateSerializerWrapper : ISerializerWrapper //<-- Serializer mus
 
 Serializers for XML and JSON have been provided, along with this template to make your own. 
 
-
-
 ### Executing Analysis
 
 Once you have created an analysis class, you are ready to analyze! The command to activate the framework is ``analyzer``. If you are using a Unix based system, you will need to use ``bash analyzer``, or do additional configuring.
 
 #### Synopsis
 ```
-<analyzer analyzer_class file_format path_to_pgn [options]> | <[-h|--help]> | <[-b|--boop]>
+analyzer <analyzer_class file_format path_to_pgn [options]> | <[-h|--help]> | <[-b|--boop]>
 ```
 #### Arguments
 | Argument     | Description |
@@ -109,7 +109,7 @@ Once you have created an analysis class, you are ready to analyze! The command t
 
 #### Example
 
-Here is an example of a properly formatted PGN file containing 12 games which has been provided:
+The following properly formatted PGN file containing 12 games has been provided:
 
 #### samplegames.pgn
 ```
@@ -157,15 +157,15 @@ To analyze this data and have the results exported to your desktop, run:
 
 Windows
 ```
-analyzer ComplexAnalyzer json samplegames.pgn --export \path\to\your\desktop\filename
+analyzer ComplexAnalyzer json samplegames.pgn --export path\to\your\desktop\filename
 ```
 Unix
 ```
-bash analyzer ComplexAnalyzer json samplegames.pgn --export /path/to/your/desktop/filename
+bash analyzer ComplexAnalyzer json samplegames.pgn --export path/to/your/desktop/filename
 ```
 
-#### Result 
-The \u0027s is caused by the apostrophe in the name of the opening, "Bishop's Opening"
+#### path/to/your/desktop/filename.json
+The ``\u0027s`` is caused by the apostrophe in the name of the opening, "Bishop's Opening"
 ```json
 [
   {
@@ -216,8 +216,62 @@ The \u0027s is caused by the apostrophe in the name of the opening, "Bishop's Op
 
 ### Additional Configurations
 
+#### Custom ECO file
 An extensive eco file has been [provided](https://lichess.org/forum/general-chess-discussion/eco-code-csv-sheet) (``eco.tsv``), which is used to resolve ECO information. However, if you wish to use your own eco file, you must ensure that it is of the same format as the example provided. 
+
+#### Runtime configurations
+The analyzer CLI is a mask on top of the dotnet command line. If you want [finer control over how the project is built and run](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-run), you can run:
+```
+dotnet run --project src/pgnanalyzer.csproj [<dotnet_args>] -- [<analyzer_args>]
+```
+
+### Testing
+If you wish to test any part of your code, place your test files under ``test/my_tests``. The template below has been provided:
+
+#### test/my_tests/Template_Test.cs
+```C#
+namespace PgnAnalyzer.MyTest; //<---Any test you write must be in the MyTest namespace to be run via "analyzer test"
+
+//This framework uses NUnit for testing. See https://github.com/nunit/nunit-csharp-samples
+
+public class Template_Test
+{
+    [SetUp]
+    public void SetUp()
+    {
+        //Code to be run before each test
+    }
+
+    [Test]
+    public void Test()
+    {
+        //Test code with Assert statements. 
+        //For more on NUnit and Assertions, visit https://docs.nunit.org/articles/nunit/writing-tests/assertions/assertions.html
+        Assert.Pass();
+    }
+}
+```
+
+To run your tests, run:
+Windows
+```
+analyzer test
+```
+Unix
+```
+bash analyzer test
+```
+
+#### Testing configurations
+If you want [finer control over how tests are performed](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-test), run:
+```
+dotnet test [<dotnet_args>]
+```
+Note that there are other tests specific to the framework, so you may wish to filter these out if taking this route.
 
 ## Documentation
 
-Coming Soon!!
+Click [here](DOCS.md) for detailed documentation and examples.
+
+
+
