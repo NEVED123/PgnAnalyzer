@@ -30,7 +30,7 @@ public class Eco_Test
     {
         Eco c20 = new Eco("C20","King's Pawn Game", Game.Parse("1 e4 e5").moves);
 
-        Console.WriteLine(c20);
+        //Console.WriteLine(c20);
 
         Assert.Pass();
     }

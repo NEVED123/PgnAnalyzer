@@ -10,6 +10,8 @@ public class Game
 
         this.moves = game.moves;
         this.result = game.result;
+
+        SortMoves();
     }
 
     public Game(List<Move>? moves, string? result)
@@ -20,12 +22,20 @@ public class Game
         }
         
         this.result = result;
+        SortMoves();
     }
 
     public Game(){}
 
+    public Move? this[int moveNum]
+    {
+        get{
+            return moves.Find(move => move.moveNum == moveNum);
+        }
+    }
+
     public string? result {get; set;}
-    public List<Move> moves {get;set;} = new List<Move>();
+    public List<Move> moves {get; private set;} = new List<Move>();
 
     public override string ToString()
     {
@@ -109,6 +119,37 @@ public class Game
        return new Game(moveList, gameResult);
     }
 
+    public void AddMove(Move move)
+    {
+        if(move.moveNum == null)
+        {
+            move.moveNum = moves.Last().moveNum + 1;
+        }
+
+        moves.Add(move);
+        SortMoves();
+    }
+
+    public void AddMoves(IEnumerable<Move> moves)
+    {
+        foreach(Move move in moves)
+        {
+            this.moves.Add(move);
+        }
+
+        SortMoves();
+    }
+
+    public void RemoveMove(int moveNum)
+    {
+        moves.RemoveAll(move => move.moveNum == moveNum);
+    }
+    
+    private void SortMoves()
+    {
+        moves.Sort();
+    }
+
     public bool HasAnalysis()
     {
         if(moves != null)
@@ -123,7 +164,7 @@ public class Game
     {
         if(moves != null)
         {
-            return moves.Any(move => move.hasAnnotations());
+            return moves.Any(move => move.HasAnnotations());
         }
 
         return false;

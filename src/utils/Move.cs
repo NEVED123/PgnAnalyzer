@@ -2,7 +2,8 @@ using System.Text.RegularExpressions;
 
 namespace PgnAnalyzer.Utils;
 
-public class Move{
+public class Move : IComparable<Move>
+{
 
     public Ply? whitePly {get; set;}
     public Ply? blackPly {get; set;}
@@ -89,6 +90,23 @@ public class Move{
         return output;
     }
 
+    
+    public int CompareTo(Move? other)
+    {
+        if(other == null || other.moveNum == null || this.moveNum > other.moveNum)
+        {
+            return 1;
+        }
+
+        if(other.moveNum > this.moveNum)
+        {
+            return -1;
+        }
+
+        Console.WriteLine("WARNING: Adding a move with a duplicate move number.");
+        return 0;
+    }
+
     public static Move Parse(string moveString)
     {
         if(!Regex.Match(moveString, ChessRegex.Move).Success)
@@ -144,7 +162,7 @@ public class Move{
         return false;
     }
 
-    public bool hasAnnotations()
+    public bool HasAnnotations()
     {
         if(blackPly != null && whitePly != null)
         {
@@ -153,4 +171,5 @@ public class Move{
 
         return false;
     }
+
 }
