@@ -18,6 +18,22 @@ public class Eco
     public string? name {get;set;}
     public List<Move>? moves {get;set;} = new List<Move>();
 
+    public override string ToString()
+    {
+        string output = $"Code: {code}\nName: {name}\nMoves: ";
+
+        if(moves != null)
+        {
+            output += Move.ListToString(moves);
+        }
+        else
+        {
+            output += "No information";
+        }
+
+        return output;
+    }
+
     public override bool Equals(object? obj)
     {
         return Equals(obj as Eco);

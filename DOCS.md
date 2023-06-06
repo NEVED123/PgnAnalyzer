@@ -1,12 +1,12 @@
 # Documentation
 
-Detailed class usage and code examples. Expect changes as the project evolves.
+Detailed class usage and code [examples]. Expect changes as the project evolves.
 
 ## PgnAnalyzer.Utils
 
 Includes classes and helper methods for chess analysis.
 
-### public class Pgn
+### ``public class Pgn``
 
 Inherits ``Dictionary<String, object>``. Stores pgn tags as key/value pairs. See examples for usage.
 
@@ -49,7 +49,7 @@ Inherits ``Dictionary<String, object>``. Stores pgn tags as key/value pairs. See
 | Overloads | Description |
 | ----------- | ----------- |
 | ``Game()`` | Initializes a new instance of the Game class. |
-| ``Game(List<Move>? moves, string? result)`` | Initializes a new instance of the Game class with specified move sequence and result |
+| ``Game(List<Move>? moves, string? result)`` | Initializes a new instance of the Game class with specified move sequence and result. |
 | ``Game(string moveString)`` | Initializes a new instance of the Game class by parsing a given game string.|
 
 ### public class Move
@@ -60,7 +60,6 @@ Inherits ``Dictionary<String, object>``. Stores pgn tags as key/value pairs. See
 | ``public Ply? whitePly { get; set; }`` | Ply containing information about white's turn. |
 | ``public Ply? blackPly { get; set; }`` | Ply containing information about blacks's turn. |
 | ``public int? moveNum { get; set; }`` | Indicates the move number of the game. |
-
 
 #### Methods
 | Method | Description |
@@ -109,6 +108,47 @@ Inherits ``Dictionary<String, object>``. Stores pgn tags as key/value pairs. See
 | ``Ply()`` | Initializes a new instance of the Ply class. |
 | ``Ply(string? san, string? analysis, string? annotation)`` | Initializes a new instance of the Game class with specified move sequence and result |
 | ``public Ply(string plyString)`` | Initializes a new instance of the Ply class by parsing a given ply string.|
+
+### public class Eco
+
+| Property | Description |
+| ----------- | ----------- |
+| ``public string? code { get; set; }`` | Eco code for this opening. Not restricted to a specific format. |
+| ``public string? name { get; set; }`` | Name for this opening. |
+| ``public List<Move>? analysis { get; set; }`` | List of moves for this opening. |
+
+#### Methods
+| Method | Description |
+| ----------- | ----------- |
+| ``public override string ToString()`` | Returns the eco as a properly formatted string. |
+| ``public override bool Equals(object? obj)`` | Checks for value equality against another object. |
+| ``public bool Equals(Ply? obj)`` | Checks for value equality against another instance of Eco. |
+| ``public override int GetHashCode()`` | Returns a hashcode for the instance of Eco. |
+
+#### Constructors
+| Overloads | Description |
+| ----------- | ----------- |
+| ``Eco()`` | Initializes a new instance of the Eco class. |
+| ``Eco(string? code, string? name, List<Move>? moves)`` | Initializes a new instance of the Eco class with specified eco code, name, and moves. |
+
+## PgnAnalyzer.IO
+
+### public class EcoReader
+
+#### Properties
+\[None]
+
+#### Methods
+| Method | Description |
+| ----------- | ----------- |
+| ``public Eco GetEcoFromCode(string code)`` | Returns an instance of Eco for the corresponding eco code. |
+| ``public Eco getEcoFromMoves(IEnumerable<Move>? moves)`` | Returns an instance of Eco for the corresponding eco code. Returns the Eco object for unknown opening if the list is null. |
+
+#### Constructors
+| Overloads | Description |
+| ----------- | ----------- |
+| ``EcoReader(string filepath)`` | Initializes a new instance of the EcoReader class with a path to the eco file to recognize. Eco file must be a tsv file. |
+
 
 ## Examples
 

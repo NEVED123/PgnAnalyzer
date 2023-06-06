@@ -24,5 +24,15 @@ public class Eco_Test
         Eco c20 = new Eco("C20","King's Pawn Game", Game.Parse("1 e4 e5").moves);
         Assert.True(c20.Equals(ecoReader!.GetEcoFromCode("C20")));
     }
+
+    [Test]
+    public void tostring()
+    {
+        Eco c20 = new Eco("C20","King's Pawn Game", Game.Parse("1 e4 e5").moves);
+
+        Console.WriteLine(c20);
+
+        Assert.Pass();
+    }
     
 }

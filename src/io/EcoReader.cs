@@ -39,7 +39,7 @@ public class EcoReader
         return new Eco("A00", "Unknown", null);
     }
 
-    public Eco getEcoFromMoves(List<Move>? moves)
+    public Eco getEcoFromMoves(IEnumerable<Move>? moves)
     {
         if(moves == null)
         {   
@@ -50,7 +50,7 @@ public class EcoReader
         sr = new StreamReader(filepath);
 
         //strip down list moves to a string that is equal to the eco file
-        List<Move> simplifiedMoves = SimplifyMoves(moves);
+        List<Move> simplifiedMoves = SanitizeMoves(moves);
 
         string movesString = "";
 
@@ -97,7 +97,7 @@ public class EcoReader
         return new Eco(bestFitCode, bestFitName, bestFitMoves);
     }
 
-    public static List<Move> SimplifyMoves(List<Move> moves)
+    private List<Move> SanitizeMoves(IEnumerable<Move> moves)
     {
         List<Move> result = new List<Move>();
 
