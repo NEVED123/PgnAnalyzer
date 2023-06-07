@@ -39,21 +39,28 @@ public class Game
 
     public override string ToString()
     {
+        return ToString(ChessPrintOptions.Default);
+    }
+
+    public string ToString(ChessPrintOptions options)
+    {
+        
         string output = "";
 
         if(moves != null)
         {
             foreach(Move move in moves)
             {
-                output += $"{move} ";
+                output += $"{move.ToString(options)} ";
             }
         }
-        if(result != null)
+        if(result != null && (options & ChessPrintOptions.NoResult) != ChessPrintOptions.NoResult)
         {
             output += $"{result}";
         }
 
         return output.Trim(' '); //Incase of no result
+
     }
 
     public override bool Equals(object? obj)

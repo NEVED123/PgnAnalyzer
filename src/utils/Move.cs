@@ -58,8 +58,13 @@ public class Move : IComparable<Move>
         return (whitePly, blackPly, moveNum).GetHashCode();
     }
     
-    public override string ToString(){
+    public override string ToString()
+    {
+        return ToString(ChessPrintOptions.Default);
+    }
 
+    public string ToString(ChessPrintOptions options)
+    {
         string output = "";
 
         if(moveNum != null && whitePly != null)
@@ -69,7 +74,7 @@ public class Move : IComparable<Move>
 
         if(whitePly != null)
         {
-            output += $"{whitePly}";
+            output += $"{whitePly.ToString(options)}";
         }
 
         if(blackPly != null)
@@ -77,14 +82,16 @@ public class Move : IComparable<Move>
             output += " ";
         }
 
-        if(moveNum != null && blackPly != null && (whitePly == null || whitePly.annotation != null))
+        if(moveNum != null && blackPly != null 
+        && (whitePly == null || whitePly.annotation != null)
+        && (options & ChessPrintOptions.NoAnnotations) != ChessPrintOptions.NoAnnotations)
         {
             output += $"{moveNum}... ";
         }
 
         if(blackPly != null)
         {
-            output += $"{blackPly}";
+            output += $"{blackPly.ToString(options)}";
         }
 
         return output;

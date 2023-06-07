@@ -71,20 +71,23 @@ public class Ply{
         return (san, annotation, analysis).GetHashCode();
     }
 
-
     public override string ToString(){
+        return ToString(ChessPrintOptions.Default);
+    }
 
+    public string ToString(ChessPrintOptions options)
+    {
         string output = "";
 
         if(san != null)
         {
             output += san;
         }
-        if(analysis != null)
+        if(analysis != null && (options & ChessPrintOptions.NoAnalysis) != ChessPrintOptions.NoAnalysis)
         {
             output += analysis;
         }
-        if(annotation != null)
+        if(annotation != null && (options & ChessPrintOptions.NoAnnotations) != ChessPrintOptions.NoAnnotations)
         {
             output += $" {annotation}";
         }
