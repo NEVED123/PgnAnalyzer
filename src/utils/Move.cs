@@ -147,7 +147,7 @@ public class Move : IComparable<Move>
         return new Move(whitePly, blackPly, moveNum);
     }
 
-    public static string ListToString(IEnumerable<Move> moves)
+    public static string ListToString(IList<Move> moves)
     {
         string result = "";
 

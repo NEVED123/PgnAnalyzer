@@ -95,7 +95,7 @@ public class Ply{
         return output.Trim(' '); //Trims space in the case of only having an annotation
     }
 
-    public static List<Ply?> ToPlyList(IEnumerable<Move> moves)
+    public static List<Ply?> ToPlyList(IList<Move> moves)
     {
         List<Ply?> result = new List<Ply?>();
 
@@ -110,7 +110,7 @@ public class Ply{
 
     public static List<Ply?> ToPlyList(Game game)
     {
-        return ToPlyList(game.moves);
+        return ToPlyList(game.readOnlyMoves);
     }
 
     public bool HasAnalysis()

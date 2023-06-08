@@ -28,7 +28,7 @@ public class EcoReader
             {
                 sr.Close();
                 string name = splitLine[1];
-                List<Move> moves = Game.Parse(splitLine[2]).moves;
+                IList<Move> moves = Game.Parse(splitLine[2]).readOnlyMoves;
                 return new Eco(code,name,moves);
             }
 
@@ -38,7 +38,7 @@ public class EcoReader
         return new Eco("A00", "Unknown", null);
     }
 
-    public Eco getEcoFromMoves(IEnumerable<Move>? moves)
+    public Eco getEcoFromMoves(IList<Move>? moves)
     {
         if(moves == null)
         {   
@@ -49,7 +49,7 @@ public class EcoReader
         sr = new StreamReader(filepath);
 
         //strip down list moves to a string that is equal to the eco file
-        List<Move> simplifiedMoves = SanitizeMoves(moves);
+        IList<Move> simplifiedMoves = SanitizeMoves(moves);
 
         string movesString = "";
 
@@ -67,7 +67,7 @@ public class EcoReader
         //Eco for unknown opening
         string bestFitCode = "A00";
         string bestFitName = "Unknown";
-        List<Move>? bestFitMoves = null;
+        IList<Move>? bestFitMoves = null;
 
 
         while(line != null)
@@ -84,7 +84,7 @@ public class EcoReader
                 {
                     bestFitCode = eco;
                     bestFitName = name;
-                    bestFitMoves = Game.Parse(ecoMoveText).moves;
+                    bestFitMoves = Game.Parse(ecoMoveText).readOnlyMoves;
                 }
             }
 
@@ -96,9 +96,9 @@ public class EcoReader
         return new Eco(bestFitCode, bestFitName, bestFitMoves);
     }
 
-    private List<Move> SanitizeMoves(IEnumerable<Move> moves)
+    private IList<Move> SanitizeMoves(IList<Move> moves)
     {
-        List<Move> result = new List<Move>();
+        IList<Move> result = new List<Move>();
 
         foreach(Move move in moves)
         {   

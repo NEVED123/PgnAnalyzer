@@ -8,17 +8,17 @@ public class Game
     {
         var game = Parse(gameString);
 
-        this.moves = game.moves;
+        this.movelist = game.movelist;
         this.result = game.result;
 
         SortMoves();
     }
 
-    public Game(List<Move>? moves, string? result)
+    public Game(List<Move>? movelist, string? result)
     {
-        if(moves != null)
+        if(movelist != null)
         {
-            this.moves = moves;
+            this.movelist = movelist;
         }
         
         this.result = result;
@@ -30,12 +30,20 @@ public class Game
     public Move? this[int moveNum]
     {
         get{
-            return moves.Find(move => move.moveNum == moveNum);
+            return movelist.Find(move => move.moveNum == moveNum);
         }
     }
 
     public string? result {get; set;}
-    public List<Move> moves {get; private set;} = new List<Move>();
+    private List<Move> movelist = new List<Move>();
+
+    public IList<Move> readOnlyMoves
+    {
+        get
+        {
+            return movelist.AsReadOnly();
+        }
+    }
 
     public override string ToString()
     {
@@ -47,9 +55,9 @@ public class Game
         
         string output = "";
 
-        if(moves != null)
+        if(movelist != null)
         {
-            foreach(Move move in moves)
+            foreach(Move move in movelist)
             {
                 output += $"{move.ToString(options)} ";
             }
@@ -75,14 +83,14 @@ public class Game
             return false; 
         }
 
-        if(this.moves == null && obj.moves == null)
+        if(this.movelist == null && obj.movelist == null)
         {
             return true;
         }
 
-        if(this.moves != null && obj.moves != null)
+        if(this.movelist != null && obj.movelist != null)
         {
-            return this.moves.SequenceEqual(obj.moves);
+            return this.movelist.SequenceEqual(obj.movelist);
         }
 
         return false;        
@@ -90,7 +98,7 @@ public class Game
 
     public override int GetHashCode()
     {
-        return (moves, result).GetHashCode();
+        return (movelist, result).GetHashCode();
     }
 
     public static Game Parse(string game)
@@ -130,18 +138,18 @@ public class Game
     {
         if(move.moveNum == null)
         {
-            move.moveNum = moves.Last().moveNum + 1;
+            move.moveNum = movelist.Last().moveNum + 1;
         }
 
-        moves.Add(move);
+        movelist.Add(move);
         SortMoves();
     }
 
-    public void AddMoves(IEnumerable<Move> moves)
+    public void AddMoves(IList<Move> movelist)
     {
-        foreach(Move move in moves)
+        foreach(Move move in movelist)
         {
-            this.moves.Add(move);
+            this.movelist.Add(move);
         }
 
         SortMoves();
@@ -149,19 +157,19 @@ public class Game
 
     public void RemoveMove(int moveNum)
     {
-        moves.RemoveAll(move => move.moveNum == moveNum);
+        movelist.RemoveAll(move => move.moveNum == moveNum);
     }
     
     private void SortMoves()
     {
-        moves.Sort();
+        movelist.Sort();
     }
 
     public bool HasAnalysis()
     {
-        if(moves != null)
+        if(movelist != null)
         {
-            return moves.Any(move => move.HasAnalysis());
+            return movelist.Any(move => move.HasAnalysis());
         }
 
         return false;
@@ -169,9 +177,9 @@ public class Game
 
     public bool HasAnnotations()
     {
-        if(moves != null)
+        if(movelist != null)
         {
-            return moves.Any(move => move.HasAnnotations());
+            return movelist.Any(move => move.HasAnnotations());
         }
 
         return false;

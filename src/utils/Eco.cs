@@ -2,7 +2,7 @@ namespace PgnAnalyzer.Utils;
 
 public class Eco
 {
-    public Eco(string? code, string? name, List<Move>? moves) 
+    public Eco(string? code, string? name, IList<Move>? moves) 
     {
         this.code = code;
         this.name = name;
@@ -16,7 +16,7 @@ public class Eco
     public Eco(){}
     public string? code {get; set;}
     public string? name {get;set;}
-    public List<Move>? moves {get;set;} = new List<Move>();
+    public IList<Move>? moves {get;set;} = new List<Move>();
 
     public override string ToString()
     {
