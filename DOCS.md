@@ -174,12 +174,12 @@ public void addGame(Pgn pgn){
             if(move.blackPly != null && move.blackPly.analysis == "??")
             {
                 blunderSan = move.blackPly.san;
-                continue;
+                break;
             }
             if(move.whitePly != null && move.whitePly.analysis == "??")
             {
                 blunderSan = move.whitePly.san;
-                continue;
+                break;
             }
         }
     }
