@@ -10,7 +10,7 @@ namespace PgnAnalyzer.Analyzer;
     by default that will appease the serializers.
 */
 
-public class OpeningData
+public class OpeningData : IComparable<OpeningData>
 {
     /*
         Serialization attributes allow us to control how object properties
@@ -34,6 +34,13 @@ public class OpeningData
 
     [XmlElement(ElementName = "Rating_Data")]
     public List<RatingData> ratingDataList {get; set;} = new List<RatingData>();
+
+    public int CompareTo(OpeningData? other)
+    {
+        if(other == null) return 1;
+
+        return string.Compare(ecoCode, other.ecoCode, StringComparison.Ordinal);
+    }
 
     //ToString method is not required
     public override string ToString()

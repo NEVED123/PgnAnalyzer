@@ -18,7 +18,7 @@ public class Game
     {
         if(movelist != null)
         {
-            this.movelist = movelist;
+            this.AddMoves(movelist);
         }
         
         this.result = result;
@@ -52,7 +52,6 @@ public class Game
 
     public string ToString(ChessPrintOptions options)
     {
-        
         string output = "";
 
         if(movelist != null)
@@ -136,20 +135,43 @@ public class Game
 
     public void AddMove(Move move)
     {
-        if(move.moveNum == null)
+        int? moveNum = move.moveNum;
+
+        if(moveNum == null)
         {
-            move.moveNum = movelist.Last().moveNum + 1;
+            if(movelist.Count == 0)
+            {
+                moveNum = 1;
+            }
+            else
+            {
+                moveNum = movelist.Last().moveNum + 1;
+            }
         }
 
-        movelist.Add(move);
+        movelist.Add(new Move(move.whitePly, move.blackPly, moveNum));
         SortMoves();
     }
 
-    public void AddMoves(IList<Move> movelist)
+    public void AddMoves(IList<Move> newMoves)
     {
-        foreach(Move move in movelist)
+        foreach(Move move in newMoves)
         {
-            this.movelist.Add(move);
+            int? moveNum = move.moveNum;
+
+            if(moveNum == null)
+            {
+                if(movelist.Count == 0)
+                {
+                    moveNum = 1;
+                }
+                else
+                {
+                    moveNum = movelist.Last().moveNum + 1;
+                }
+            }
+
+            movelist.Add(new Move(move.whitePly, move.blackPly, moveNum));
         }
 
         SortMoves();

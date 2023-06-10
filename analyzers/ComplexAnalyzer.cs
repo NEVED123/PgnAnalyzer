@@ -60,11 +60,16 @@ public class ComplexAnalyzer : IAnalyzer
         }
 
         //Util for Eco. 
-        Eco eco;
+        Eco? eco;
 
         if(pgn.ContainsKey("eco"))
         {
             eco = ecoReader.GetEcoFromCode((string)pgn["eco"]);
+
+            if(eco == null)
+            {
+                eco = new Eco("A00", "Unknown Opening", null);
+            }
         }
         else
         {
@@ -167,6 +172,7 @@ public class ComplexAnalyzer : IAnalyzer
   
     public object Export()
     {
+        openings.Sort();
         return openings;
     }
 

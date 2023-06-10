@@ -7,4 +7,5 @@ public enum ChessPrintOptions
     NoAnalysis = 1,
     NoAnnotations = 2,
     NoResult = 4,
+    NoMoveNumbers = 8
 }

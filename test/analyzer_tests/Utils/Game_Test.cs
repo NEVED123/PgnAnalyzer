@@ -8,7 +8,7 @@ public class Game_Test
         StringAssert.AreEqualIgnoringCase("1-0", new Game("1-0").ToString());
         StringAssert.AreEqualIgnoringCase("", new Game("").ToString());
 
-        StringAssert.AreEqualIgnoringCase("e4 e5 Nf3 Nf6", new Game("e4 e5 Nf3 Nf6").ToString());
+        StringAssert.AreEqualIgnoringCase("1. e4 e5 2. Nf3 Nf6", new Game("e4 e5 Nf3 Nf6").ToString());
 
         StringAssert.AreEqualIgnoringCase(
             "1. d4 c5 2. Nf3 cxd4 3. Nxd4 e5 4. Nb3 d5 5. g3 Nf6 6. Bg2 Be6 7. O-O Nbd7 8. Bg5 Nb6 9. Nc3 d4 10. Ne4 Be7 11. Bxf6 Bxf6 12. Nxf6+ Qxf6 13. Bxb7 Rb8 14. Bc6+ Bd7 15. Bxd7+ Nxd7 16. e3 dxe3 17. fxe3 Qb6 18. Qd5 Qxe3+ 19. Kh1 Rd8 20. Qxf7# 1-0",
@@ -90,6 +90,9 @@ public class Game_Test
         Game game = new Game("1. e4 { [%eval 0.25] } 1... e5 { [%eval 0.3] } 2. f4?! { [%eval -0.26] } 2... exf4 { [%eval -0.24] } 3. Nf3 { [%eval -0.29] } 3... Be7 { [%eval -0.24] } 4. Bc4 { [%eval -0.45] } 4... h6? { [%eval 1.71] } 5. d4? { [%eval 0.68] } 5... Nf6 { [%eval 0.2] } 6. Nc3 { [%eval 0.51] } 6... d6 { [%eval 0.3] } 1-0");
 
         StringAssert.AreEqualIgnoringCase("1. e4 e5 2. f4 exf4 3. Nf3 Be7 4. Bc4 h6 5. d4 Nf6 6. Nc3 d6", game.ToString(ChessPrintOptions.NoAnalysis | ChessPrintOptions.NoAnnotations | ChessPrintOptions.NoResult));
+
+        StringAssert.AreEqualIgnoringCase("e4 e5 Nf3 Nf6", new Game("e4 e5 Nf3 Nf6").ToString(ChessPrintOptions.NoMoveNumbers));
+
     }
 
     [Test]
@@ -97,8 +100,7 @@ public class Game_Test
     {
         Game game = new Game("1. e4 { [%eval 0.25] } 1... e5 { [%eval 0.3] } 2. f4?! { [%eval -0.26] } 2... exf4 { [%eval -0.24] } 3. Nf3 { [%eval -0.29] } 3... Be7 { [%eval -0.24] } 4. Bc4 { [%eval -0.45] } 4... h6? { [%eval 1.71] } 5. d4? { [%eval 0.68] } 5... Nf6 { [%eval 0.2] } 6. Nc3 { [%eval 0.51] } 6... d6 { [%eval 0.3] } 1-0");
 
-        game.readOnlyMoves.Add(new Move("e5 e6"));
-
-        Console.WriteLine(game.readOnlyMoves);
+        Assert.Throws<NotSupportedException>(
+        () => {  game.readOnlyMoves.Add(new Move("e5 e6")); });
     }
 }

@@ -67,7 +67,8 @@ public class Move : IComparable<Move>
     {
         string output = "";
 
-        if(moveNum != null && whitePly != null)
+        if(moveNum != null && whitePly != null
+        && (options & ChessPrintOptions.NoMoveNumbers) != ChessPrintOptions.NoMoveNumbers)
         {
             output += $"{moveNum}. ";
         }
@@ -84,7 +85,8 @@ public class Move : IComparable<Move>
 
         if(moveNum != null && blackPly != null 
         && (whitePly == null || whitePly.annotation != null)
-        && (options & ChessPrintOptions.NoAnnotations) != ChessPrintOptions.NoAnnotations)
+        && (options & ChessPrintOptions.NoAnnotations) != ChessPrintOptions.NoAnnotations
+        && (options & ChessPrintOptions.NoMoveNumbers) != ChessPrintOptions.NoMoveNumbers)
         {
             output += $"{moveNum}... ";
         }
@@ -149,14 +151,14 @@ public class Move : IComparable<Move>
 
     public static string ListToString(IList<Move> moves)
     {
-        string result = "";
+        return ListToString(moves, ChessPrintOptions.Default);
+    }
 
-        foreach(Move move in moves)
-        {
-            result += $"{move} ";
-        }
+    public static string ListToString(IList<Move> moves, ChessPrintOptions options)
+    {
+        Game game = new Game(moves.ToList(), null);
 
-        return result.Trim(' ');
+        return game.ToString(options);
     }
 
     public bool HasAnalysis()
