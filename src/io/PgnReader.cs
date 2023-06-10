@@ -4,8 +4,32 @@ using System.Text.RegularExpressions;
 namespace PgnAnalyzer.IO;
 
 /*
-NOTE: ALL TAGS, EXCLUDING THE MOVETEXT, WILL BE READ AS STRINGS BY DEFAULT.
+Common Tags this thing understands:
+Date/UTCDate - DateTime
+    standard is yyyy.mm.dd, ?? for unknown  
+        if unable to parse, use DateTime.Min
+Time/UTCTime - DateTime
+    standard is HH:MM:SS
+Round - int
+PlyCount - int
+WhiteRatingDiff - int
+BlackRatingDiff - int
+WhiteElo - int
+BlackElo - int
+Event - String
+Site - String
+White - String
+Black - String
+Result - String
+Annotator - String
+TimeControl - String
+Termination - String
+Mode - String
+FEN - String
+ECO - String
+Opening - String
 */
+
 public class PgnReader : IEnumerator<Pgn>
 {
     private StreamReader sr;
@@ -84,15 +108,41 @@ public class PgnReader : IEnumerator<Pgn>
         return true;
     }
 
-    private (string Key, string Value) parseTag(string tag)
+    private (string Key, object Value) parseTag(string tag)
     {
         string tagNoBrackets = tag.Trim(new char[]{'[', ']'});
 
         string[] tagArray = tagNoBrackets.Split(' ', 2);
 
-        tagArray[1] = tagArray[1].Trim('"');
+        string key = tagArray[0].Trim(new char[]{'"',' '}).ToLower();
+        string valueString = tagArray[1].Trim(new char[]{'"',' '});
 
-        return (tagArray[0], tagArray[1]);
+        object? value;
+
+        switch(key)
+        {
+            case "date":
+            case "utcdate":
+            case "time":
+            case "utctime":
+                DateTime.TryParse(valueString, out DateTime date);
+                value = date;
+            break;
+            case "round":
+            case "plycount":
+            case "whiteratingdiff":
+            case "blackratingdiff":
+            case "whiteelo":
+            case "blackelo":
+                int.TryParse(valueString, out int round);
+                value = round;
+            break;
+            default:
+                value = valueString;
+            break;
+        }
+        
+        return (key, value);
     }
 
     public void Reset()

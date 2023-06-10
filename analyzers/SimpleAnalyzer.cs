@@ -33,18 +33,16 @@ public class SimpleAnalyzer : IAnalyzer //<--Your analysis class must implement 
     
     public void AddGame(Pgn pgn)
     {  
-        if(!pgn.ContainsKey("WhiteElo") || !pgn.ContainsKey("BlackElo"))
+        if(!pgn.ContainsTag("WhiteElo") || !pgn.ContainsTag("BlackElo"))
         {
             return;
         }
 
-        int whiteElo = 0;
-        int blackElo = 0;
+        //The PGN reader will parse common PGN tags
+        //into the proper data type, see the documention for specifics. 
+        int whiteElo = (int)pgn["WhiteElo"];
+        int blackElo = (int)pgn["BlackElo"];
  
-        //The PGN reader will automatically read any tags as strings, however the PGN class can hold any datatype. Therefore, we must cast into strings before continuing.
-        int.TryParse((string)pgn["WhiteElo"], out whiteElo);
-        int.TryParse((string)pgn["BlackElo"], out blackElo);
-
         totalRatingPoints += whiteElo + blackElo;
         numGames++;
     }

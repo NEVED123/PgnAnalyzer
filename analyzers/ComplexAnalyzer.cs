@@ -62,7 +62,7 @@ public class ComplexAnalyzer : IAnalyzer
         //Util for Eco. 
         Eco? eco;
 
-        if(pgn.ContainsKey("eco"))
+        if(pgn.ContainsTag("eco"))
         {
             eco = ecoReader.GetEcoFromCode((string)pgn["eco"]);
 
@@ -200,14 +200,14 @@ public class ComplexAnalyzer : IAnalyzer
         int numOfElos = 0;
         int totalElo = 0;
 
-        if(pgn.ContainsKey("WhiteElo") && int.TryParse((string)pgn["WhiteElo"], out int n))
+        if(pgn.ContainsTag("WhiteElo"))
         {
-            totalElo += int.Parse((string)pgn["WhiteElo"]);
+            totalElo += (int)pgn["WhiteElo"];
             numOfElos++;
         }
-        if(pgn.ContainsKey("BlackElo") && int.TryParse((string)pgn["BlackElo"], out int m))
+        if(pgn.ContainsTag("BlackElo"))
         {
-            totalElo += int.Parse((string)pgn["BlackElo"]);
+            totalElo += (int)pgn["BlackElo"];
             numOfElos++;
         }
 
