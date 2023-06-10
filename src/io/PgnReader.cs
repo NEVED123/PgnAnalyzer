@@ -105,8 +105,6 @@ public class PgnReader : IEnumerator<Pgn>
             }
         }
 
-        Console.WriteLine(pgn);
-
         return pgnScanned;
     }
 
