@@ -12,7 +12,7 @@ public class Pgn
 
         foreach(KeyValuePair<String, Object> tag in tags)
         {
-            output += $"[{tag.Key} {tag.Value}]\n";
+            output += $"[{tag.Key} \"{tag.Value}\"]\n";
         }
 
         if(game != null)

@@ -3,40 +3,19 @@ using System.Text.RegularExpressions;
 
 namespace PgnAnalyzer.IO;
 
-/*
-Common Tags this thing understands:
-Date/UTCDate - DateTime
-    standard is yyyy.mm.dd, ?? for unknown  
-        if unable to parse, use DateTime.Min
-Time/UTCTime - DateTime
-    standard is HH:MM:SS
-Round - int
-PlyCount - int
-WhiteRatingDiff - int
-BlackRatingDiff - int
-WhiteElo - int
-BlackElo - int
-Event - String
-Site - String
-White - String
-Black - String
-Result - String
-Annotator - String
-TimeControl - String
-Termination - String
-Mode - String
-FEN - String
-ECO - String
-Opening - String
-*/
-
 public class PgnReader : IEnumerator<Pgn>
 {
     private StreamReader sr;
     private Pgn? pgn;
 
+    private string? line = null;
+
+    private int PgnFileLine = 0;
+    private string pathToPgn;
+
     public PgnReader(string pathToPgn)
     {
+        this.pathToPgn = pathToPgn;
         sr = new StreamReader(pathToPgn);
     }
     public Pgn Current
@@ -47,7 +26,7 @@ public class PgnReader : IEnumerator<Pgn>
             {
                 return pgn;
             }
-            else
+            else    
             {
                 throw new InvalidOperationException();
             }
@@ -70,42 +49,63 @@ public class PgnReader : IEnumerator<Pgn>
     {
         pgn = new Pgn();
 
-        //read one pgn
-        string? line = sr.ReadLine();
+        bool pgnScanned = false;
 
-        if(line == null){
-            return false;
-        }
-
-        while(line != null && Regex.Match(line, ChessRegex.Tag).Success)
-        {
-            //we are reading a tag
-
-            var tag = parseTag(line);
-            pgn[tag.Key] = tag.Value;
-            line = sr.ReadLine();
-        }
+        string pgnElementsRegex = $"{ChessRegex.Tag}|{ChessRegex.GameWithAtLeastOneMove}";
 
         if(line == null)
         {
-            //here the file terminates before reading the game
-            pgn = null;
-            return false;
+            line = sr.ReadLine(); //initializes file reading, or we are at end of pgn
+            PgnFileLine++;
         }
 
-        line = sr.ReadLine(); //burn whitespace between tags and game
-
-        string game = "";
-
-        while(line != null && Regex.Matches(line, ChessRegex.Move).Count > 0)
+        while(!pgnScanned && line != null)
         {
-            game += line;
-            line = sr.ReadLine();
+            if(line == null || line == String.Empty)
+            {
+                line = sr.ReadLine();
+                PgnFileLine++;
+                continue;
+            }
+
+            if(Regex.Matches(line, pgnElementsRegex).Count != 1)
+            {
+                //we are not reading an empty line or a typical pgn element.
+                Console.WriteLine($"WARNING: Line {PgnFileLine} of {pathToPgn} is improperly formatted. This may result in faulty parsing.");
+                line = sr.ReadLine();
+                PgnFileLine++;
+                continue;
+            }
+
+            if(Regex.Match(line, ChessRegex.Tag).Success)
+            {
+                var tag = parseTag(line);
+                pgn[tag.Key] = tag.Value;
+                line = sr.ReadLine();
+                PgnFileLine++;
+                continue;
+            }
+
+            string moveText = "";
+
+            //If we reach this code, we are now expecting a game, although its possible there is none
+            while(!pgnScanned)
+            {
+                if(line != null && Regex.Matches(line, ChessRegex.GameWithAtLeastOneMove).Count == 1)
+                {
+                    moveText += line + " ";
+                    line = sr.ReadLine();
+                    PgnFileLine++;
+                }
+                else
+                {
+                    pgn.game = Game.Parse(moveText);
+                    pgnScanned = true;                    
+                }
+            }
         }
 
-        pgn.game = new Game(game);
-
-        return true;
+        return pgnScanned;
     }
 
     private (string Key, object Value) parseTag(string tag)
@@ -115,7 +115,7 @@ public class PgnReader : IEnumerator<Pgn>
         string[] tagArray = tagNoBrackets.Split(' ', 2);
 
         string key = tagArray[0].Trim(new char[]{'"',' '}).ToLower();
-        string valueString = tagArray[1].Trim(new char[]{'"',' '});
+        string valueString = tagArray[1].Trim(new char[]{'"',' '}).ToLower();
 
         object? value;
 
