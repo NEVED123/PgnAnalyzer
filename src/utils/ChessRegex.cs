@@ -13,8 +13,11 @@ public class ChessRegex
     //includes both players moves and the numbers, inclues half turns (white moves and black loses), spaces can be freely added/removed
     public static readonly string Move = @"\d*\.?\s?(([Oo0](-[Oo0]){1,2}|[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](=[QRBN])?)[#+]?\s?[\??!?]*\s?(\{[^\{\}]*\})?)(\s?(\d+\.{3})?\s?(([Oo0](-[Oo0]){1,2}|[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](=[QRBN])?)[#+]?\s?[\??!?]*\s?(\{[^\{\}]*\})?))?";
 
-    //includes one or more moves, and an optional result
+    //includes zero or more moves, and an optional result
     public static readonly string Game = @"(\d*\.?\s?(([Oo0](-[Oo0]){1,2}|[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](=[QRBN])?)[#+]?\s?[\??!?]*\s?(\{[^\{\}]*\})?)(\s?(\d+\.{3})?\s?(([Oo0](-[Oo0]){1,2}|[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](=[QRBN])?)[#+]?\s?[\??!?]*\s?(\{[^\{\}]*\})?))?\s?)*(\s?(1-0|0-1|1\/2-1\/2))?";
+
+    //includes one or more moves, and an optional result
+    public static readonly string GameWithAtLeastOneMove = @"(\d*\.?\s?(([Oo0](-[Oo0]){1,2}|[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](=[QRBN])?)[#+]?\s?[\??!?]*\s?(\{[^\{\}]*\})?)(\s?(\d+\.{3})?\s?(([Oo0](-[Oo0]){1,2}|[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](=[QRBN])?)[#+]?\s?[\??!?]*\s?(\{[^\{\}]*\})?))?\s?)+(\s?(1-0|0-1|1\/2-1\/2))?";
 
     public static readonly string Result = @"(1-0|0-1|1\/2-1\/2)";
 

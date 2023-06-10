@@ -1,4 +1,5 @@
 using PgnAnalyzer.Utils;
+using System.Text.RegularExpressions;
 
 namespace PgnAnalyzer.IO;
 
@@ -7,11 +8,15 @@ public class EcoReader
     private List<Eco> ecoList;
     public EcoReader(string filepath)
     {
+        //TODO: Add file type verification
+        
         ecoList = new List<Eco>();
 
         StreamReader sr = new StreamReader(filepath);
 
         sr.ReadLine(); //burn header
+
+        int ecoFileLine = 1; //for warning/debugging
 
         string? line;
 
@@ -19,14 +24,26 @@ public class EcoReader
         {
             while((line = sr.ReadLine()) != null)
             {
+                ecoFileLine++; 
+                if(line == String.Empty) continue;
+
                 string[] splitLine = line.Split('\t');
+
+                if(splitLine.Length != 3)
+                {
+                    Console.WriteLine($"WARNING: Eco at line {ecoFileLine} could not be resolved.");
+                    continue;
+                }
+                if(!Regex.Match(splitLine[2], ChessRegex.GameWithAtLeastOneMove).Success)
+                {
+                    Console.WriteLine($"WARNING: The following eco movetext could at line {ecoFileLine} not be resolved: {splitLine[2]}");
+                }
 
                 string code = splitLine[0];
                 string name = splitLine[1];
                 IList<Move> moves = Game.Parse(splitLine[2]).readOnlyMoves;
-
-                ecoList.Add(new Eco(code, name, moves));                
-                //Console.WriteLine($"{code}, {name}, {Move.ListToString(moves)}");
+                ecoList.Add(new Eco(code, name, moves));  
+                
             }
         }
     }
