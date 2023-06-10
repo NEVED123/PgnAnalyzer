@@ -42,8 +42,7 @@ public class EcoReader
                 string code = splitLine[0];
                 string name = splitLine[1];
                 IList<Move> moves = Game.Parse(splitLine[2]).readOnlyMoves;
-                ecoList.Add(new Eco(code, name, moves));  
-                
+                ecoList.Add(new Eco(code, name, moves));                  
             }
         }
     }
