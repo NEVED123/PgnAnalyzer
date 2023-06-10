@@ -105,6 +105,8 @@ public class PgnReader : IEnumerator<Pgn>
             }
         }
 
+        Console.WriteLine(pgn);
+
         return pgnScanned;
     }
 
@@ -123,10 +125,11 @@ public class PgnReader : IEnumerator<Pgn>
         {
             case "date":
             case "utcdate":
+                value = ParsePgnDate(valueString);
+            break;
             case "time":
             case "utctime":
-                DateTime.TryParse(valueString, out DateTime date);
-                value = date;
+                value = ParsePgnTime(valueString);
             break;
             case "round":
             case "plycount":
@@ -143,6 +146,20 @@ public class PgnReader : IEnumerator<Pgn>
         }
         
         return (key, value);
+    }
+
+    private DateTime ParsePgnDate(string input)
+    {
+        DateTime.TryParseExact(input,"yyyy.MM.dd",null,System.Globalization.DateTimeStyles.None, out DateTime date);
+
+        return new DateTime(date.Year,date.Month,date.Day,0,0,0);
+    }
+
+    private DateTime ParsePgnTime(string input)
+    {
+        DateTime.TryParseExact(input,"HH:mm:ss",null, System.Globalization.DateTimeStyles.None,out DateTime time);
+
+        return new DateTime(1,1,1,time.Hour,time.Minute,time.Second);
     }
 
     public void Reset()
