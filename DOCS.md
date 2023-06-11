@@ -8,8 +8,10 @@ Detailed class usage and code [examples](#examples).
     * [Game](#public-class-game)
     * [Move](#public-class-move)
     * [Ply](#public-class-ply)
+    * [ChessPrintOptions](#public-enum-chessprintoptions)
 * [PgnAnalyzer.IO](#pgnanalyzerio)
     * [EcoReader](#public-class-ecoreader)
+* [Examples](#examples)
 
 ## PgnAnalyzer.Utils
 
@@ -86,13 +88,12 @@ Represents a complete move in a chess game.
 | Method | Description |
 | ----------- | ----------- |
 | ``public static Move Parse(string moveString)`` | Parses a move string and returns a new instance of Move. Throws an exception if the game cannot be parsed. |
-| ``public override string ToString()`` | Returns the move as a properly formatted string. |
-| ``public override bool Equals(object? obj)`` | Checks for value equality against another object. |
-| ``public bool Equals(Game? obj)`` | Checks for value equality against another instance of Move. |
-| ``public override int GetHashCode()`` | Returns a hashcode for the instance of Move. |
 | ``public static string ListToString(IEnumerable<Move> moves)`` | Returns a properly formatted string for a sequence of move instances. |
 | ``public bool HasAnalysis()`` | Checks whether the move contains any analysis information. |
 | ``public bool HasAnnotations()`` | Checks whether the move contains any annotations. |
+| ``public override string ToString()`` | Returns the move as a properly formatted string. |
+| ``public string ToString(ChessPrintOptions options)`` | Returns the move as a properly formatted string with the specified print options. |
+| ``public bool Equals(Game? obj)`` | Checks for value equality against another instance of Move. |
 
 #### Constructors
 | Overloads | Description |
@@ -116,16 +117,15 @@ Represents a ply (half-move) in a chess game.
 | Method | Description |
 | ----------- | ----------- |
 | ``public static Ply Parse(string moveString)`` | Parses a ply string and returns a new instance of Ply. Throws an exception if the game cannot be parsed. |
-| ``public override string ToString()`` | Returns the ply as a properly formatted string. |
-| ``public override bool Equals(object? obj)`` | Checks for value equality against another object. |
-| ``public bool Equals(Ply? obj)`` | Checks for value equality against another instance of Ply. |
-| ``public override int GetHashCode()`` | Returns a hashcode for the instance of Ply. |
-| ``public static List<Ply?> ToPlyList(IEnumerable<Move> moves)`` | Returns a list of ply by deconstructing a list of moves, filtering out null plys. |
-| ``public static List<Ply?> ToPlyList(Game game)`` | Returns a list of ply by deconstructing a game, filtering out null plys. |
+| ``public static List<Ply> ToPlyList(IEnumerable<Move> moves)`` | Returns a list of ply by deconstructing a list of moves, filtering out null plys. |
+| ``public static List<Ply> ToPlyList(Game game)`` | Returns a list of ply by deconstructing a game, filtering out null plys. |
 | ``public static List<Ply?> ToPlyListIncludingNulls(IEnumerable<Move> moves)`` | Returns a list of ply by deconstructing a list of moves, including null plys. |
 | ``public static List<Ply?> ToPlyListIncludingNulls(Game game)`` | Returns a list of ply by deconstructing a game, including null plys. |
 | ``public bool HasAnalysis()`` | Checks whether the ply contains any analysis information. |
 | ``public bool HasAnnotations()`` | Checks whether the ply contains any annotations. |
+| ``public override string ToString()`` | Returns the ply as a properly formatted string. |
+| ``public string ToString(ChessPrintOptions options)`` | Returns the ply as a properly formatted string with the specified print options. |
+| ``public bool Equals(Ply? obj)`` | Checks for value equality against another instance of Ply. |
 
 #### Constructors
 | Overloads | Description |
@@ -148,15 +148,25 @@ Represents an [Eco](#https://en.wikipedia.org/wiki/Encyclopaedia_of_Chess_Openin
 | Method | Description |
 | ----------- | ----------- |
 | ``public override string ToString()`` | Returns the eco as a properly formatted string. |
-| ``public override bool Equals(object? obj)`` | Checks for value equality against another object. |
 | ``public bool Equals(Ply? obj)`` | Checks for value equality against another instance of Eco. |
-| ``public override int GetHashCode()`` | Returns a hashcode for the instance of Eco. |
 
 #### Constructors
 | Overloads | Description |
 | ----------- | ----------- |
 | ``Eco()`` | Initializes a new instance of the Eco class. |
 | ``Eco(string? code, string? name, List<Move>? moves)`` | Initializes a new instance of the Eco class with specified eco code, name, and moves. |
+
+### public enum ChessPrintOptions
+
+Options for how chess games are printed.
+
+| Field | Value | Description |
+| ----------- | ----------- | ----------- |
+| Default | 0 | No print specifications. |
+| NoAnalysis | 1 | Prints with no analysis such as ??, !!, etc. |
+| NoAnnotations | 2 | Prints wiht no annotations such as {This move is an inaccuracy.} |
+| NoResult | 4 | Prints with no result such as 1-0, 0-1, etc. |
+| NoMoveNumbers | 8 | Prints with no move numbers. |
 
 ## PgnAnalyzer.IO
 
@@ -217,7 +227,7 @@ public void addGame(Pgn pgn){
 }
 
 ```
-### Get the event and ratings of each player.
+### Get the event and ratings of each player, and their game as a string with no annotations or analysis.
 
 ```C#
 public void addGame(Pgn pgn){
@@ -227,6 +237,7 @@ public void addGame(Pgn pgn){
     string chessEvent = "Unknown";
     int whiteRating = -1;
     int blackRating = -1;
+    string moveText = pgn.game.ToString(ChessPrintOptions.NoAnnotations | ChessPrintOptions.NoAnalysis);
 
     //These are common tags, so they will be stored as their logical datatypes when scanned from a pgn file.
     if(pgn.ContainsTag("Event"))
