@@ -8,7 +8,7 @@ Detailed class usage and code [examples](#examples).
     * [Game](#public-class-game)
     * [Move](#public-class-move)
     * [Ply](#public-class-ply)
-*[PgnAnalyzer.IO](#pgnanalyzerio)
+* [PgnAnalyzer.IO](#pgnanalyzerio)
     * [EcoReader](#public-class-ecoreader)
 
 ## PgnAnalyzer.Utils
