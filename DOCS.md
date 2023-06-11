@@ -8,7 +8,7 @@ Includes classes and helper methods for chess analysis.
 
 ### ``public class Pgn``
 
-Inherits ``Dictionary<String, object>``. Stores pgn tags as key/value pairs. See examples for usage.
+Stores pgn tags as key/value pairs that can be indexed like a dictionary. Keys are case-insensitive, See examples for usage.
 
 #### Properties
 | Property | Description |
@@ -16,32 +16,42 @@ Inherits ``Dictionary<String, object>``. Stores pgn tags as key/value pairs. See
 | ``public Game game { get; set; }`` | Sequence of moves that make up the game. |
 
 #### Methods
+
 | Method | Description |
 | ----------- | ----------- |
+| ``public bool ContaingsTag(string key)`` | True if the pgn contains tag with the specifed key; otherwise, false.|
+| ``public bool Remove(string key)`` | Returns true if the tag is successfully found and removed; otherwise, false. This method returns false if key is not found in the pgn. |
+| ``public bool TryGetValue(string tag, out object? value)`` | Returns true if the pgn contains an tag with the specified key; otherwise, false. |
+| ``public void Add(string key, object value)`` | Adds the specifed tag to the pgn. |
 | ``public override string ToString()`` | Returns the pgn as a properly formatted string. |
+| ``public override string ToString(ChessPrintOptions options)`` | Returns the pgn as a properly formatted string with the specified printing options. |
 
 #### Constructors
 | Overloads | Description |
 | ----------- | ----------- |
 | ``Pgn()`` | Initializes a new instance of the Pgn class. |
 
-
 ### public class Game
+
+Moves can be indexed by move number like a dictionary.
 
 #### Properties
 | Property | Description |
 | ----------- | ----------- |
-| ``public List<Move> moves { get; set; }`` | Sequence of moves that make up the game. |
+| ``public IList<Move> readonlyMoves { get; set; }`` | Readonly list of moves that make up the game, sorted by move number. |
 | ``public string? result { get; set; }`` | Result of the game as a string, i.e "1-0", "0-1". It is recommended to keep these as [SAN result values](https://en.wikipedia.org/wiki/Algebraic_notation_(chess)#End_of_game), however they can be any string value. |
 
 #### Methods
 | Method | Description |
 | ----------- | ----------- |
 | ``public static Game Parse(string moveString)`` | Parses a game string and returns a new instance of Game. Throws an exception if the game cannot be parsed. |
+|``public void AddMove(Move move)``| Adds a move to the game. If the new move contains a move number, it will be placed in the correct place. Otherwise, it will be appended to the end of the list. |
+|``public void AddMoves(IList<Move> moves)``| Adds a list of moves to the game in a similar fashion to AddMove(Move). |
+|`` public void ClearMoves()``| Clears all moves in the list.|
+|`` public void RemoveMove(int moveNum)``| Removes all moves with the specified move number.|
 | ``public override string ToString()`` | Returns the game as a properly formatted string. |
-| ``public override bool Equals(object? obj)`` | Checks for value equality against another object. |
+| ``public override string ToString(ChessPrintOptions options)`` | Returns the game as a properly formatted string with the specified print options. |
 | ``public bool Equals(Game? obj)`` | Checks for value equality against another instance of Game. |
-| ``public override int GetHashCode()`` | Returns a hashcode for the instance of Game. |
 | ``public bool HasAnalysis()`` | Checks whether the game contains any analysis information. |
 | ``public bool HasAnnotations()`` | Checks whether the game contains any annotations. |
 
@@ -97,8 +107,10 @@ Inherits ``Dictionary<String, object>``. Stores pgn tags as key/value pairs. See
 | ``public override bool Equals(object? obj)`` | Checks for value equality against another object. |
 | ``public bool Equals(Ply? obj)`` | Checks for value equality against another instance of Ply. |
 | ``public override int GetHashCode()`` | Returns a hashcode for the instance of Ply. |
-| ``public static List<Ply?> ToPlyList(IEnumerable<Move> moves)`` | Returns a list of ply by deconstructing a list of moves. |
-| ``public static List<Ply?> ToPlyList(Game game)`` | Returns a list of ply by deconstructing a game. |
+| ``public static List<Ply?> ToPlyList(IEnumerable<Move> moves)`` | Returns a list of ply by deconstructing a list of moves, filtering out null plys. |
+| ``public static List<Ply?> ToPlyList(Game game)`` | Returns a list of ply by deconstructing a game, filtering out null plys. |
+| ``public static List<Ply?> ToPlyListIncludingNulls(IEnumerable<Move> moves)`` | Returns a list of ply by deconstructing a list of moves, including null plys. |
+| ``public static List<Ply?> ToPlyListIncludingNulls(Game game)`` | Returns a list of ply by deconstructing a game, including null plys. |
 | ``public bool HasAnalysis()`` | Checks whether the ply contains any analysis information. |
 | ``public bool HasAnnotations()`` | Checks whether the ply contains any annotations. |
 
@@ -134,6 +146,8 @@ Inherits ``Dictionary<String, object>``. Stores pgn tags as key/value pairs. See
 ## PgnAnalyzer.IO
 
 ### public class EcoReader
+
+Can be indexed by eco code. Indexing is case-insensitive.
 
 #### Properties
 \[None]
@@ -199,17 +213,18 @@ public void addGame(Pgn pgn){
     int whiteRating = -1;
     int blackRating = -1;
 
-    if(pgn.ContainsKey("Event"))
+    //These are common tags, so they will be stored as their logical datatypes when scanned from a pgn file.
+    if(pgn.ContainsTag("Event"))
     {
         chessEvent = (string)pgn["Event"];
     }
-    if(pgn.ContainsKey("WhiteElo"))
+    if(pgn.ContainsTag("WhiteElo"))
     {   
-        int.TryParse((string)pgn["WhiteElo"], out whiteRating);
+        whiteRating = (int)pgn["WhiteElo"]
     }
-    if(pgn.ContainsKey("BlackElo"))
+    if(pgn.ContainsTag("BlackElo"))
     {   
-        int.TryParse((string)pgn["BlackElo"], out blackRating);
+        blackRating = (int)pgn["BlackElo"];
     }
 
     // ...

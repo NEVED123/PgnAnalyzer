@@ -73,7 +73,7 @@ public class ComplexAnalyzer : IAnalyzer
         }
         else
         {
-            eco = ecoReader.getEcoFromMoves(game.readOnlyMoves);
+            eco = ecoReader.getEcoFromMoves(game.readonlyMoves);
         }
 
         //get appropiate openingData class if it exists
@@ -130,7 +130,7 @@ public class ComplexAnalyzer : IAnalyzer
 
         //get First Ply out of book - We must figure out if it was whites move or blacks move.
 
-        int gameLength = game.readOnlyMoves.Count();
+        int gameLength = game.readonlyMoves.Count();
         int ecoLength = eco.moves!.Count();
 
         if(gameLength <= ecoLength || ecoLength == 0)
@@ -145,11 +145,11 @@ public class ComplexAnalyzer : IAnalyzer
 
         if(lastMoveOfEco.blackPly == null)
         {
-            newPly = game.readOnlyMoves[ecoLength-1].blackPly!; //Black made the first out of book move
+            newPly = game.readonlyMoves[ecoLength-1].blackPly!; //Black made the first out of book move
         }
         else
         {
-            newPly = game.readOnlyMoves[ecoLength].whitePly!; //White made the first out of book move
+            newPly = game.readonlyMoves[ecoLength].whitePly!; //White made the first out of book move
         }
 
         //SANitize ply

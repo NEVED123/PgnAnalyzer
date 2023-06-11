@@ -108,6 +108,6 @@ public class Game_Test
         Game game = new Game("1. e4 { [%eval 0.25] } 1... e5 { [%eval 0.3] } 2. f4?! { [%eval -0.26] } 2... exf4 { [%eval -0.24] } 3. Nf3 { [%eval -0.29] } 3... Be7 { [%eval -0.24] } 4. Bc4 { [%eval -0.45] } 4... h6? { [%eval 1.71] } 5. d4? { [%eval 0.68] } 5... Nf6 { [%eval 0.2] } 6. Nc3 { [%eval 0.51] } 6... d6 { [%eval 0.3] } 1-0");
 
         Assert.Throws<NotSupportedException>(
-        () => {  game.readOnlyMoves.Add(new Move("e5 e6")); });
+        () => {  game.readonlyMoves.Add(new Move("e5 e6")); });
     }
 }

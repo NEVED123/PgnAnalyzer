@@ -37,7 +37,7 @@ public class Game
     public string? result {get; set;}
     private List<Move> movelist = new List<Move>();
 
-    public IList<Move> readOnlyMoves
+    public IList<Move> readonlyMoves
     {
         get
         {
@@ -139,9 +139,9 @@ public class Game
         SortMoves();
     }
 
-    public void AddMoves(IList<Move> newMoves)
+    public void AddMoves(IList<Move> moves)
     {
-        foreach(Move move in newMoves)
+        foreach(Move move in moves)
         {
             AddMoveWithoutSorting(move);
         }
@@ -202,6 +202,11 @@ public class Game
     public void RemoveMove(int moveNum)
     {
         movelist.RemoveAll(move => move.moveNum == moveNum);
+    }
+
+    public void ClearMoves()
+    {
+        movelist.Clear();
     }
     
     private void SortMoves()

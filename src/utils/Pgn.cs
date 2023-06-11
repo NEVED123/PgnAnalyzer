@@ -8,6 +8,11 @@ public class Pgn
 
     public override string ToString()
     {
+        return ToString(ChessPrintOptions.Default);
+    }
+
+    public string ToString(ChessPrintOptions options)
+    {
         string output = ""; 
 
         foreach(KeyValuePair<String, Object> tag in tags)
@@ -17,7 +22,7 @@ public class Pgn
 
         if(game != null)
         {
-            output += $"\n{game}\n";
+            output += $"\n{game.ToString(options)}\n";
         }
         
         return output;
@@ -33,6 +38,11 @@ public class Pgn
         {
             tags[key] = value;
         }
+    }
+
+    public void Add(string key, object value)
+    {
+        tags[key] = value;
     }
 
     public bool ContainsTag(string key)

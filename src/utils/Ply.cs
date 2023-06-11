@@ -127,9 +127,14 @@ public class Ply{
         return result;
     }
 
+    public static List<Ply?> ToPlyListIncludingNulls(Game game)
+    {
+        return ToPlyListIncludingNulls(game.readonlyMoves);
+    }
+
     public static List<Ply> ToPlyList(Game game)
     {
-        return ToPlyList(game.readOnlyMoves);
+        return ToPlyList(game.readonlyMoves);
     }
 
     public bool HasAnalysis()
