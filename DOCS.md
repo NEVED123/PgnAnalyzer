@@ -1,6 +1,15 @@
 # Documentation
 
-Detailed class usage and code [examples]. Expect changes as the project evolves.
+Detailed class usage and code [examples](#examples).
+
+## Table Of Contents
+* [PgnAnalyzer.Utils](#pgnanalyzerutils)
+    * [Pgn](#public-class-pgn)
+    * [Game](#public-class-game)
+    * [Move](#public-class-move)
+    * [Ply](#public-class-ply)
+*[PgnAnalyzer.IO](#pgnanalyzerio)
+    * [EcoReader](#public-class-ecoreader)
 
 ## PgnAnalyzer.Utils
 
@@ -19,10 +28,10 @@ Stores pgn tags as key/value pairs that can be indexed like a dictionary. Keys a
 
 | Method | Description |
 | ----------- | ----------- |
-| ``public bool ContaingsTag(string key)`` | True if the pgn contains tag with the specifed key; otherwise, false.|
-| ``public bool Remove(string key)`` | Returns true if the tag is successfully found and removed; otherwise, false. This method returns false if key is not found in the pgn. |
-| ``public bool TryGetValue(string tag, out object? value)`` | Returns true if the pgn contains an tag with the specified key; otherwise, false. |
 | ``public void Add(string key, object value)`` | Adds the specifed tag to the pgn. |
+| ``public bool Remove(string key)`` | Returns true if the tag is successfully found and removed; otherwise, false. This method returns false if key is not found in the pgn. |
+| ``public bool ContaingsTag(string key)`` | True if the pgn contains tag with the specifed key; otherwise, false.|
+| ``public bool TryGetValue(string tag, out object? value)`` | Returns true if the pgn contains an tag with the specified key; otherwise, false. |
 | ``public override string ToString()`` | Returns the pgn as a properly formatted string. |
 | ``public override string ToString(ChessPrintOptions options)`` | Returns the pgn as a properly formatted string with the specified printing options. |
 
@@ -64,6 +73,8 @@ Moves can be indexed by move number like a dictionary.
 
 ### public class Move
 
+Represents a complete move in a chess game.
+
 #### Properties
 | Property | Description |
 | ----------- | ----------- |
@@ -91,6 +102,8 @@ Moves can be indexed by move number like a dictionary.
 | ``Move(string moveString)`` | Initializes a new instance of the Move class by parsing a given move string.|
 
 ### public class Ply
+
+Represents a ply (half-move) in a chess game.
 
 #### Properties
 | Property | Description |
@@ -123,6 +136,8 @@ Moves can be indexed by move number like a dictionary.
 
 ### public class Eco
 
+Represents an [Eco](#https://en.wikipedia.org/wiki/Encyclopaedia_of_Chess_Openings) opening.
+
 | Property | Description |
 | ----------- | ----------- |
 | ``public string? code { get; set; }`` | Eco code for this opening. Not restricted to a specific format. |
@@ -147,7 +162,7 @@ Moves can be indexed by move number like a dictionary.
 
 ### public class EcoReader
 
-Can be indexed by eco code. Indexing is case-insensitive.
+Turns a tsv file of eco's into an object which can be indexed by code. Indexing is case-insensitive.
 
 #### Properties
 \[None]

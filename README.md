@@ -1,11 +1,23 @@
 # PgnAnalyzer
 PgnAnalyzer parses your [PGN](https://en.wikipedia.org/wiki/Portable_Game_Notation) file into a set of utility classes and provides environment to easily gather data about a large set of games. This data can then be easily exported to a file type of your choice.
 
-NOTE - This is not a chess engine, nor is there built in functionality for checking the validity of moves, etc. It is a tool to analyze existing chess PGNs.
+NOTE - This is not a chess engine, nor is there built in functionality for checking the validity of moves, etc. It is optimized for data collection from existing chess PGNs.
 
-PgnAnalyzer is still under development. Bug fixes and more features are on the way!
+## Table Of Contents
+* [Installation](#installation)
+  * [Prerequsites](#prerequisites)
+* [Usage](#usage)
+  * [Creating your own analyzer](#creating-your-own-analyzer)
+  * [Creating your own serializer](#optional-creating-your-own-serializer--configuring-existing-serializers)
+  * [Executing Analysis](#executing-analysis
+  * [Example](#example)
+  * [Additional Configurations](#additional-configurations)
+  * [Testing](#testing)
+* [Documentation](DOCS.md)
 
 ## Installation
+
+Note: This has only been tested on Windows.
 
 ### Prerequisites
 * [Git](https://git-scm.com/downloads)
@@ -107,7 +119,7 @@ analyzer <analyzer_class file_format path_to_pgn [options]> | <[-h|--help]> | <[
 | ``-x, --export <FILE_PATH>`` | Location and name of the exported file.|
 | ``-c, --count <INTEGER>`` | Indicate analysis progress after this many games. |
 
-#### Example
+### Example
 
 The following properly formatted PGN file containing 12 games has been provided:
 
@@ -169,15 +181,15 @@ The ``\u0027s`` is caused by the apostrophe in the name of the opening, "Bishop'
 ```json
 [
   {
-    "ecoCode": "B01",
-    "ecoName": "Scandinavian",
-    "ecoMoves": "e4 d5",
+    "ecoCode": "A02",
+    "ecoName": "Bird\u0027s Opening",
+    "ecoMoves": "1. f4",
     "numGames": 1,
     "ratingDataList": [
       {
         "outOfBookDataList": [
           {
-            "san": "exd5",
+            "san": "b6",
             "count": 1
           }
         ],
@@ -190,19 +202,19 @@ The ``\u0027s`` is caused by the apostrophe in the name of the opening, "Bishop'
     ]
   },
   {
-    "ecoCode": "C23",
-    "ecoName": "Bishop\u0027s Opening",
-    "ecoMoves": "e4 e5 Bc4",
+    "ecoCode": "B01",
+    "ecoName": "Scandinavian",
+    "ecoMoves": "1. e4 d5",
     "numGames": 1,
     "ratingDataList": [
       {
         "outOfBookDataList": [
           {
-            "san": "d5",
+            "san": "exd5",
             "count": 1
           }
         ],
-        "eloMin": 1000,
+        "eloMin": 1500,
         "whiteWinNum": 1,
         "blackWinNum": 0,
         "drawNum": 0,
