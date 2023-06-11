@@ -12,6 +12,16 @@ public class TemplateAnalyzer : IAnalyzer //<--Your analysis class must implemen
             Logic to perform for each new game. 
             Think of this block of code as the body 
             of a for loop that iterates over all games in the pgn file.
+
+            Values from your tags will be converted into strings except for the following:
+                Round - int
+                PlyCount - int
+                WhiteRatingDiff - int
+                BlackRatingDiff - int
+                WhiteElo - int
+                BlackElo - int 
+                Date or UTCDate - DateTime with time 00:00:00
+                Time or UTCTime - DateTime with day 01/01/0001
         */
     }
 
