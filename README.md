@@ -9,7 +9,7 @@ NOTE - This is not a chess engine, nor is there built in functionality for check
 * [Usage](#usage)
   * [Creating your own analyzer](#creating-your-own-analyzer)
   * [Creating your own serializer](#optional-creating-your-own-serializer--configuring-existing-serializers)
-  * [Executing Analysis](#executing-analysis
+  * [Executing Analysis](#executing-analysis)
   * [Example](#example)
   * [Additional Configurations](#additional-configurations)
   * [Testing](#testing)
