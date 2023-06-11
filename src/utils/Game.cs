@@ -135,8 +135,25 @@ public class Game
 
     public void AddMove(Move move)
     {
-        int? moveNum = move.moveNum;
+        AddMoveWithoutSorting(move);
+        SortMoves();
+    }
 
+    public void AddMoves(IList<Move> newMoves)
+    {
+        foreach(Move move in newMoves)
+        {
+            AddMoveWithoutSorting(move);
+        }
+        SortMoves();
+    }
+
+    private void AddMoveWithoutSorting(Move move)
+    {   
+        int? moveNum = move.moveNum;
+        Ply? whitePly = move.whitePly;
+        Ply? blackPly = move.blackPly;
+        
         if(moveNum == null)
         {
             if(movelist.Count == 0)
@@ -148,33 +165,38 @@ public class Game
                 moveNum = movelist.Last().moveNum + 1;
             }
         }
-
-        movelist.Add(new Move(move.whitePly, move.blackPly, moveNum));
-        SortMoves();
-    }
-
-    public void AddMoves(IList<Move> newMoves)
-    {
-        foreach(Move move in newMoves)
+        else if(whitePly == null ^ blackPly == null) //Fancy XOR operator 😎😎
         {
-            int? moveNum = move.moveNum;
-
-            if(moveNum == null)
+            if(whitePly == null)
             {
-                if(movelist.Count == 0)
+               Move? moveToReplace = movelist.Find(moveToReplace => 
+                moveToReplace.moveNum == moveNum 
+                && moveToReplace.whitePly != null 
+                && moveToReplace.blackPly == null); 
+
+                if(moveToReplace != null)
                 {
-                    moveNum = 1;
-                }
-                else
-                {
-                    moveNum = movelist.Last().moveNum + 1;
+                    movelist.Remove(moveToReplace);
+                    whitePly = moveToReplace.whitePly;
                 }
             }
+            else //blackply is null
+            {
+               Move? moveToReplace = movelist.Find(moveToReplace => 
+                moveToReplace.moveNum == moveNum 
+                && moveToReplace.whitePly == null 
+                && moveToReplace.blackPly != null); 
 
-            movelist.Add(new Move(move.whitePly, move.blackPly, moveNum));
+                if(moveToReplace != null)
+                {
+                    movelist.Remove(moveToReplace);
+                    blackPly = moveToReplace.whitePly;
+                }                
+            }
+            
         }
 
-        SortMoves();
+        movelist.Add(new Move(whitePly, blackPly, moveNum));
     }
 
     public void RemoveMove(int moveNum)

@@ -64,7 +64,7 @@ public class ComplexAnalyzer : IAnalyzer
 
         if(pgn.ContainsTag("eco"))
         {
-            eco = ecoReader.GetEcoFromCode((string)pgn["eco"]);
+            eco = ecoReader.GetEcoFromCode(((string)pgn["eco"])); 
 
             if(eco == null)
             {

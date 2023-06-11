@@ -65,9 +65,16 @@ public class Game_Test
         game.AddMove(new Move(new Ply("e4", null,null),new Ply("e5", null,null), 3));
         game.AddMove(new Move(new Ply("e4", null,null),new Ply("e5", null,null), 1));
         game.AddMove(new Move(new Ply("e4", null,null),new Ply("e5", null,null), null));
-
-
         StringAssert.AreEqualIgnoringCase("1. e4 e5 3. e4 e5 4. e4 e5", game.ToString());
+
+        Game game1 = new Game();
+
+        game1.AddMove(new Move(new Ply("d4",null,null),null,1));
+        game1.AddMove(new Move(null, new Ply("d5",null,null),1));
+        game1.AddMove(new Move(new Ply("e4",null,null),null,null));
+        game1.AddMove(new Move(new Ply("e5",null,null),null,null));
+
+        StringAssert.AreEqualIgnoringCase("1. d4 d5 2. e4 3. e5", game1.ToString());
     }
 
     [Test]
