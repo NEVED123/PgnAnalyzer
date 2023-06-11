@@ -17,7 +17,7 @@ public class PgnReader_Test
 
         Pgn pgn = reader.Current;
 
-        StringAssert.IsMatch("rated blitz game",(string)pgn["event"]);
+        StringAssert.IsMatch("Rated Blitz game",(string)pgn["event"]);
 
         Assert.That(1662, Is.EqualTo((int)pgn["whiteelo"]));
 

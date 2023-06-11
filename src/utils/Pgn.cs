@@ -4,7 +4,7 @@ public class Pgn
 {
     public Game? game {get; set;}
 
-    private Dictionary<string, object> tags = new Dictionary<string, object>();
+    private Dictionary<string, object> tags = new Dictionary<string, object>(new CaseInsensitiveStringComparer());
 
     public override string ToString()
     {
@@ -27,7 +27,7 @@ public class Pgn
     {
         get
         {
-            return tags[key.ToLower()];
+            return tags[key];
         }
         set
         {
@@ -37,17 +37,32 @@ public class Pgn
 
     public bool ContainsTag(string key)
     {
-        return tags.ContainsKey(key.ToLower());
+        return tags.ContainsKey(key);
     }
 
     public bool Remove(string key)
     {
-        return tags.Remove(key.ToLower());
+        return tags.Remove(key);
     }
 
     public bool TryGetValue(string tag, out object? value)
     {
-        return tags.TryGetValue(tag.ToLower(), out value);
+        return tags.TryGetValue(tag, out value);
+    }
+
+    private class CaseInsensitiveStringComparer : IEqualityComparer<string>
+    {
+        public bool Equals(string? x, string? y)
+        {
+            return string.Equals(x, y, StringComparison.OrdinalIgnoreCase);
+        }
+
+        public int GetHashCode(string obj)
+        {
+            return obj.ToLowerInvariant().GetHashCode();
+        }
     }
 }
+
+
 

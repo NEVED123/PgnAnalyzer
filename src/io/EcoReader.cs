@@ -51,7 +51,7 @@ public class EcoReader
     {
         get
         {
-            return ecoList.Find(eco => eco.code == code.ToUpper());
+            return ecoList.Find(eco => code.Equals(eco.code, StringComparison.OrdinalIgnoreCase));
         }
     }
 

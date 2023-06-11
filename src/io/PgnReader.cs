@@ -115,12 +115,12 @@ public class PgnReader : IEnumerator<Pgn>
 
         string[] tagArray = tagNoBrackets.Split(' ', 2);
 
-        string key = tagArray[0].Trim(new char[]{'"',' '}).ToLower();
-        string valueString = tagArray[1].Trim(new char[]{'"',' '}).ToLower();
+        string key = tagArray[0].Trim(new char[]{'"',' '});
+        string valueString = tagArray[1].Trim(new char[]{'"',' '});
 
         object? value;
 
-        switch(key)
+        switch(key.ToLower())
         {
             case "date":
             case "utcdate":
